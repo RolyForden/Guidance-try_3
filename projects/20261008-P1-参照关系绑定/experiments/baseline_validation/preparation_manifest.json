@@ -1,0 +1,95 @@
+{
+  "date": "2026-10-08",
+  "scope": "Preparation only; no model loading, training or evaluation",
+  "root": "/root/autodl-tmp/p1-prep",
+  "environment": {
+    "path": "/root/autodl-tmp/p1-prep/env",
+    "python": "3.10.22",
+    "pip_check": "No broken requirements found",
+    "inference_ready": false,
+    "packages": {
+      "certifi": "2026.7.22",
+      "charset-normalizer": "3.5.2",
+      "filelock": "4.0.12",
+      "fsspec": "2026.9.0",
+      "huggingface-hub": "0.26.5",
+      "idna": "3.20",
+      "packaging": "26.3",
+      "PyYAML": "6.0.3",
+      "requests": "2.34.2",
+      "tqdm": "4.70.1",
+      "typing_extensions": "4.16.0",
+      "urllib3": "2.8.0"
+    }
+  },
+  "small_assets": {
+    "repo": "WhynotHug/PixDLM",
+    "revision": "f40fa586e28f644d5db19e6d8905f626a6b7fd13",
+    "local_dir": "/root/autodl-tmp/p1-prep/assets/pixdlm-source",
+    "files": [
+      {
+        "path": "pretrained/pixdlm-7b/added_tokens.json",
+        "bytes": 302,
+        "sha256": "bbaebc406cf94d55e6cc61ef5b08f8bdb75656875ea8c58c2ad78efd8c30f976",
+        "upstream_git_blob_match": true
+      },
+      {
+        "path": "pretrained/pixdlm-7b/config.json",
+        "bytes": 1983,
+        "sha256": "119bda336b96f1e40d75c1027a0eb8aabff8e32a5ebeb142a18c7323581c7454",
+        "upstream_git_blob_match": true
+      },
+      {
+        "path": "pretrained/pixdlm-7b/generation_config.json",
+        "bytes": 657,
+        "sha256": "73433fe55b507862ad6ebbc16cda23c2369841643c74a61c66cccd116f9e6704",
+        "upstream_git_blob_match": true
+      },
+      {
+        "path": "pretrained/pixdlm-7b/special_tokens_map.json",
+        "bytes": 438,
+        "sha256": "719833ff26ac897a3ec8ed946028a135de2a351470af59b4008744ab1f0ee9b7",
+        "upstream_git_blob_match": true
+      },
+      {
+        "path": "pretrained/pixdlm-7b/tokenizer.model",
+        "bytes": 499723,
+        "sha256": "9e556afd44213b6bd1be2b850ebbbd98f5481437a8021afaf58ee7fb1818d347",
+        "upstream_lfs_sha256_and_size_match": true
+      },
+      {
+        "path": "pretrained/pixdlm-7b/tokenizer_config.json",
+        "bytes": 1499,
+        "sha256": "ea53abb72f512f5be484950a5eebff1ab43377c70f6cb443f981d684734a63a2",
+        "upstream_git_blob_match": true
+      },
+      {
+        "path": "requirements.txt",
+        "bytes": 365,
+        "sha256": "cb2f5237e587c7046334386c2b5df16f31f1879a84f08983b75e697c325fe968",
+        "upstream_git_blob_match": true
+      }
+    ]
+  },
+  "partial_assets": [
+    {
+      "repo": "facebook/sam2.1-hiera-large",
+      "revision": "665f8e2ad61cf5f53d65644ff27c8ee525124610",
+      "path": "/root/autodl-tmp/p1-prep/assets/sam2/sam2.1_hiera_large.pt.partial",
+      "actual_bytes": 33554432,
+      "expected_complete_bytes": 898083611,
+      "expected_complete_sha256": "2647878d5dfa5098f2f8649825738a9345572bae2d4350a2468587ece47dd318",
+      "complete": false,
+      "complete_hash_verified": false,
+      "error": "curl 92: HTTP/2 stream CANCEL"
+    }
+  ],
+  "not_downloaded": [
+    "PixDLM pytorch_model.bin",
+    "DRSeg.zip",
+    "CLIP model.safetensors",
+    "Complete baseline source code"
+  ],
+  "background_download_running": false,
+  "local_proxy_tunnel_open": false
+}

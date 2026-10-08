@@ -1,6 +1,6 @@
 # 容器预检 - 2026-10-08
 
-范围：用户提供的容器，只读硬件、目录与包元数据检查。无模型加载、训练、评测、安装或大文件下载。连接凭据与完整交互转写不入Git。
+范围：用户提供的容器，首次只读硬件、目录与包元数据检查；后续无卡准备另见资产准备文件。无模型加载、训练或评测。连接凭据与完整交互转写不入Git。
 
 ## 实际观察
 
@@ -31,9 +31,15 @@ find /root -maxdepth 4 -type d \( -iname '*pixdlm*' -o -iname '*drseg*' -o -inam
 
 首次复合预检返回1，末尾ls含不存在的目录；SSH认证与前面的硬件查询已成功，不把返回1误报成连接失败。独立非登录bash没有conda PATH，初始python查询提示command not found；改用现存绝对路径后得到上述版本。这是运维查询修正，不是实验失败重跑。
 
+## 无卡模式复检
+
+同日重新连接后，`nvidia-smi`返回`No devices were found`；`/sys/fs/cgroup/memory.max`为2147483648，`cpu.max`为`50000 100000`，与2GiB/0.5核无卡模式一致。数据盘约50G可用，conda版本24.4.0。
+
+HF直连API返回curl错误7（Connection refused）；GitHub与repo.anaconda.com返回HTTP 200，不能归因为整个容器断网。根据[AutoDL官方内置加速说明](https://www.autodl.com/docs/network_turbo/)，仅在子shell执行`source /etc/network_turbo`后，原HF API返回200；固定SAM文件的单字节Range请求返回206、1字节。说明API及该文件下载链路可达，不代表完整资产已下载或长期速度可靠。未更换HF镜像、revision或TLS验证策略，未输出代理配置内容。
+
 ## 下一步与边界
 
-- 等待下载资产与准备独立环境授权，不覆盖基础Python/PyTorch。
+- 下载与独立环境准备已获授权；不覆盖基础Python/PyTorch。
 - 逐项核定模型/数据版本、落地哈希、实际容量、缓存重复占用及许可；如果50G不足，停报，不擅自扩容或删平台目录。
 - 冻结question-only输入与validation命令；公开脚本默认test，不能直接执行。
 - 无自己的IoU、失败样本、吞吐或单样本显存数据，不能宣称底座就绪或P1成立。
