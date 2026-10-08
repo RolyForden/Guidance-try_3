@@ -66,4 +66,16 @@ HTTPS_PROXY=http://127.0.0.1:17890 HTTP_PROXY=http://127.0.0.1:17890 HF_HOME=/ro
 
 独立环境`pip check`返回`No broken requirements found`；仅验证当前下载工具依赖，不代表Pix推理兼容。数据盘df报告50G、已用504M、约50G可用。
 
-用户本地即将关机：本轮未留下后台下载任务，SSH已退出、隧道已关闭。服务器文件不随本地关机删除。后续若需离线持续下载，应在容器侧使用独立网络及tmux等持久会话，明确日志、容量、重试上限与验收；目前未创建这样的任务。网络准备不改变P1研究判断，尚无模型输出。
+上一轮用户本地即将关机时：未留下后台下载任务，SSH退出、隧道关闭。服务器文件不随本地关机删除。后续镜像测速与后台准备另见下节；网络准备不改变P1研究判断，尚无模型输出。
+
+## 镜像测速与后台准备
+
+用户批准尝试hf-mirror.com，并随后要求在本地三分钟后关机前尽快完成安排。仅下载此前获批的四个公开大资产；版本与官方源端期望大小/哈希不变。下载过程不上传私有材料或凭据。
+
+- 容器直连镜像API返回200；SAM固定revision、898083611字节及LFS SHA256与前述官方元数据相同。
+- 前8MiB请求返回206，8388608字节，15.677171秒，535084 bytes/s；SHA256为0acf013594236fdc40fb26a7a38313d01a3d76b907ce9d3fe29268c19741c3b1，与现有官方源.partial前8MiB逐字节一致。
+- 两路并发读取第二、第三个8MiB片段，均返回206，各8388608字节；总墙钟28.181秒，合计约595KB/s。两个片段与官方源.partial对应区间逐字节一致。并发收益有限，不能承诺所有文件持续同速或一晚完成，也不能从结果确定旧链路具体瓶颈。
+- 启动容器侧`nohup timeout 43200 curl --parallel --parallel-immediate --parallel-max 2 ...`，PID2173（timeout）；每个传输HTTP/1.1、直连镜像、固定resolve revision、续传、15秒连接超时、21600秒传输上限、最多2次重试、10秒间隔、120秒重试预算。总任务最多12小时。不是定时任务，不自动开关机、不扩盘、不训练。
+- 目标为数据盘assets/sam2/sam2.1_hiera_large.pt.partial、assets/clip/model.safetensors.partial、assets/drseg/DRSeg.zip.partial、assets/pixdlm/pytorch_model.bin.partial。日志为`/root/autodl-tmp/p1-prep/logs/mirror-download.log`；stdin为/dev/null，输出写远端日志，网络明确不走本地代理。保留已有SAM部分文件续传。
+- 文件未验收前保持.partial；curl传输完成不等于哈希合格。下一次复连先检查日志、大小与前述完整SHA256，不加载模型、不读取或解包test。预计下载体积与当前容量允许保留10GiB余量；若出错停报，不无界重启。
+- 启动后断开SSH并重新连接核实：PID2173的PPID已为1，curl子进程2174仍运行；SAM由56029184增至57110528 bytes，CLIP由7139328增至8155136 bytes。说明实际后台传输在断连后继续，不是仅凭nohup命令推断。短测速度不能作为当前后台持续吞吐保证。复检后再次退出SSH，未建立本地代理隧道。

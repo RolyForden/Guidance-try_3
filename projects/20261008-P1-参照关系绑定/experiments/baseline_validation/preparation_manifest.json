@@ -76,20 +76,43 @@
       "repo": "facebook/sam2.1-hiera-large",
       "revision": "665f8e2ad61cf5f53d65644ff27c8ee525124610",
       "path": "/root/autodl-tmp/p1-prep/assets/sam2/sam2.1_hiera_large.pt.partial",
-      "actual_bytes": 33554432,
+      "actual_bytes": 57110528,
       "expected_complete_bytes": 898083611,
       "expected_complete_sha256": "2647878d5dfa5098f2f8649825738a9345572bae2d4350a2468587ece47dd318",
       "complete": false,
       "complete_hash_verified": false,
-      "error": "curl 92: HTTP/2 stream CANCEL"
+      "previous_error": "curl 92: HTTP/2 stream CANCEL on original-source proxy download",
+      "status_at_last_check": "Downloading from authorized mirror"
+    },
+    {
+      "repo": "openai/clip-vit-large-patch14",
+      "revision": "32bd64288804d66eefd0ccbe215aa642df71cc41",
+      "path": "/root/autodl-tmp/p1-prep/assets/clip/model.safetensors.partial",
+      "actual_bytes": 8155136,
+      "expected_complete_bytes": 1710540580,
+      "expected_complete_sha256": "a2bf730a0c7debf160f7a6b50b3aaf3703e7e88ac73de7a314903141db026dcb",
+      "complete": false,
+      "complete_hash_verified": false,
+      "status_at_last_check": "Downloading from authorized mirror"
     }
   ],
   "not_downloaded": [
     "PixDLM pytorch_model.bin",
     "DRSeg.zip",
-    "CLIP model.safetensors",
     "Complete baseline source code"
   ],
-  "background_download_running": false,
+  "background_download_running": true,
+  "background_job": {
+    "pid": 2173,
+    "curl_pid": 2174,
+    "survived_ssh_disconnect": true,
+    "endpoint": "https://hf-mirror.com",
+    "method": "nohup timeout curl --parallel",
+    "max_concurrent_transfers": 2,
+    "total_timeout_seconds": 43200,
+    "log": "/root/autodl-tmp/p1-prep/logs/mirror-download.log",
+    "completion_and_hash_verification_pending": true,
+    "depends_on_local_computer": false
+  },
   "local_proxy_tunnel_open": false
 }
