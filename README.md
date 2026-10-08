@@ -4,7 +4,7 @@
 
 仓库：[RolyForden/Guidance-try_3](https://github.com/RolyForden/Guidance-try_3)。本地路径：`Z:\Guidance-try_3`。
 
-本次切换工作区的维护交接：[HANDOFF.md](HANDOFF.md)，仅用于完成旧仓库本地目录改名，不是新课题方案。
+本次切换工作区的维护交接：[HANDOFF.md](HANDOFF.md)，旧仓库本地目录改名已完成，保留交接记录；不是新课题方案。
 
 工作流来自[母本 personal-paper](https://github.com/RolyForden/personal-paper)，初始化版本为 `c072ce018b3796b31be16e327ef13f75e3609d82`。仅带入规则、路由、模板、脚本和通用参考，不复制旧课题数据、结果或 Git 历史。
 
