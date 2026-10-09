@@ -79,3 +79,28 @@ HTTPS_PROXY=http://127.0.0.1:17890 HTTP_PROXY=http://127.0.0.1:17890 HF_HOME=/ro
 - 目标为数据盘assets/sam2/sam2.1_hiera_large.pt.partial、assets/clip/model.safetensors.partial、assets/drseg/DRSeg.zip.partial、assets/pixdlm/pytorch_model.bin.partial。日志为`/root/autodl-tmp/p1-prep/logs/mirror-download.log`；stdin为/dev/null，输出写远端日志，网络明确不走本地代理。保留已有SAM部分文件续传。
 - 文件未验收前保持.partial；curl传输完成不等于哈希合格。下一次复连先检查日志、大小与前述完整SHA256，不加载模型、不读取或解包test。预计下载体积与当前容量允许保留10GiB余量；若出错停报，不无界重启。
 - 启动后断开SSH并重新连接核实：PID2173的PPID已为1，curl子进程2174仍运行；SAM由56029184增至57110528 bytes，CLIP由7139328增至8155136 bytes。说明实际后台传输在断连后继续，不是仅凭nohup命令推断。短测速度不能作为当前后台持续吞吐保证。复检后再次退出SSH，未建立本地代理隧道。
+
+## 2026-10-09下载验收
+
+复连后PID2173/2174均不存在，原后台任务已结束。远端日志保留，不删除或覆盖；未重新启动下载、安装推理依赖或运行模型。
+
+| 文件 | 实际字节数 | 官方期望字节数 | 结果 |
+|---|---:|---:|---|
+| CLIP model.safetensors.partial | 1710540580 | 1710540580 | sha256sum为a2bf730a0c7debf160f7a6b50b3aaf3703e7e88ac73de7a314903141db026dcb，与官方源一致；完整验收，暂保留原文件名 |
+| SAM sam2.1_hiera_large.pt.partial | 150288598 | 898083611 | curl 18，传输提前关闭；不完整 |
+| PixDLM pytorch_model.bin.partial | 173391299 | 13611289441 | curl 18，传输提前关闭；不完整 |
+| DRSeg.zip.partial | 未创建 | 2641097515 | HTTP 404；原命令漏了dataset的/datasets/前缀 |
+
+四个目标文件现有字节合计2034220477（约2.03GB），其中通过完整验收的只有CLIP约1.71GB。不能把部分字节当作可用模型；短测约0.54MB/s没有转化为稳定的整体下载速度。
+
+DRSeg错误由主agent构造URL时混淆model/dataset仓库类型造成，不是数据不存在或镜像不可用。固定revision的镜像dataset API返回版本、大小和LFS SHA256均与此前官方值相同；正确地址为`https://hf-mirror.com/datasets/WhynotHug/DRSeg/resolve/2b143f9a0721b7b5dbba4dd9f0bed9a22ede444d/DRSeg.zip?download=true`。仅将路径类型修正后，单字节Range测试返回206、1字节、3.382762秒；这验证了正确地址可读，不等于完整数据集已下载。
+
+```bash
+ps -p 2173,2174 -o pid,ppid,stat,etime,comm
+stat -c '%s %n' /root/autodl-tmp/p1-prep/assets/sam2/sam2.1_hiera_large.pt.partial /root/autodl-tmp/p1-prep/assets/clip/model.safetensors.partial /root/autodl-tmp/p1-prep/assets/drseg/DRSeg.zip.partial /root/autodl-tmp/p1-prep/assets/pixdlm/pytorch_model.bin.partial
+tail -n 20 /root/autodl-tmp/p1-prep/logs/mirror-download.log
+sha256sum /root/autodl-tmp/p1-prep/assets/clip/model.safetensors.partial
+df -h /root/autodl-tmp
+```
+
+stat因为DRSeg文件不存在返回非零，这与其他三个文件大小查询有效并不矛盾。日志记录SAM传输2487.980427秒、接收116734166新字节；Pix传输2261.150258秒、接收173391299字节；CLIP传输10576.412464秒、接收1710540580字节。不能由这些日志确认后台任务整体退出码或两个传输提前关闭的网络根因，不能声称因本地关机而失败。数据盘df报告50G总量、2.4G已用、48G可用。下一步修正dataset路径并使用可恢复的下载方式处理剩余资产；保留负结果和原日志，不无界重试。

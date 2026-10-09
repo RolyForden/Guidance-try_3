@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-08",
+  "date": "2026-10-09",
   "scope": "Preparation only; no model loading, training or evaluation",
   "root": "/root/autodl-tmp/p1-prep",
   "environment": {
@@ -71,37 +71,62 @@
       }
     ]
   },
-  "partial_assets": [
+  "large_assets": [
     {
       "repo": "facebook/sam2.1-hiera-large",
       "revision": "665f8e2ad61cf5f53d65644ff27c8ee525124610",
       "path": "/root/autodl-tmp/p1-prep/assets/sam2/sam2.1_hiera_large.pt.partial",
-      "actual_bytes": 57110528,
+      "actual_bytes": 150288598,
       "expected_complete_bytes": 898083611,
       "expected_complete_sha256": "2647878d5dfa5098f2f8649825738a9345572bae2d4350a2468587ece47dd318",
       "complete": false,
       "complete_hash_verified": false,
       "previous_error": "curl 92: HTTP/2 stream CANCEL on original-source proxy download",
-      "status_at_last_check": "Downloading from authorized mirror"
+      "status_at_last_check": "Stopped incomplete; curl 18, transfer closed early"
     },
     {
       "repo": "openai/clip-vit-large-patch14",
       "revision": "32bd64288804d66eefd0ccbe215aa642df71cc41",
       "path": "/root/autodl-tmp/p1-prep/assets/clip/model.safetensors.partial",
-      "actual_bytes": 8155136,
+      "actual_bytes": 1710540580,
       "expected_complete_bytes": 1710540580,
       "expected_complete_sha256": "a2bf730a0c7debf160f7a6b50b3aaf3703e7e88ac73de7a314903141db026dcb",
+      "complete": true,
+      "complete_hash_verified": true,
+      "actual_sha256": "a2bf730a0c7debf160f7a6b50b3aaf3703e7e88ac73de7a314903141db026dcb",
+      "status_at_last_check": "Complete size and SHA256 match; filename retained"
+    },
+    {
+      "repo": "WhynotHug/PixDLM",
+      "revision": "f40fa586e28f644d5db19e6d8905f626a6b7fd13",
+      "path": "/root/autodl-tmp/p1-prep/assets/pixdlm/pytorch_model.bin.partial",
+      "actual_bytes": 173391299,
+      "expected_complete_bytes": 13611289441,
+      "expected_complete_sha256": "fc3f8ec17e57c17068be371c33bbe06b156be779f0087a5bb63d9f658729b220",
       "complete": false,
       "complete_hash_verified": false,
-      "status_at_last_check": "Downloading from authorized mirror"
+      "status_at_last_check": "Stopped incomplete; curl 18, transfer closed early"
+    },
+    {
+      "repo": "WhynotHug/DRSeg",
+      "repo_type": "dataset",
+      "revision": "2b143f9a0721b7b5dbba4dd9f0bed9a22ede444d",
+      "expected_path": "/root/autodl-tmp/p1-prep/assets/drseg/DRSeg.zip.partial",
+      "file_exists": false,
+      "actual_bytes": 0,
+      "expected_complete_bytes": 2641097515,
+      "expected_complete_sha256": "1378bb70c789730fe38b7a3dd28f47f36c63c4e3bafb7e89367a6232e647317b",
+      "complete": false,
+      "complete_hash_verified": false,
+      "correct_url": "https://hf-mirror.com/datasets/WhynotHug/DRSeg/resolve/2b143f9a0721b7b5dbba4dd9f0bed9a22ede444d/DRSeg.zip?download=true",
+      "status_at_last_check": "404 caused by missing /datasets/ prefix in original command"
     }
   ],
   "not_downloaded": [
-    "PixDLM pytorch_model.bin",
     "DRSeg.zip",
     "Complete baseline source code"
   ],
-  "background_download_running": true,
+  "background_download_running": false,
   "background_job": {
     "pid": 2173,
     "curl_pid": 2174,
