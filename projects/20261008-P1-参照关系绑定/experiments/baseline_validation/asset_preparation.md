@@ -130,3 +130,16 @@ PID28779为timeout，28780为aria2；总12小时上限，到时先INT保存进�
 18:07（北京时间）巡检发现aria2记录DRSeg校验成功及完成。独立执行`stat -c '%s %n' /root/autodl-tmp/p1-prep/assets/drseg/DRSeg.zip.partial`和`sha256sum /root/autodl-tmp/p1-prep/assets/drseg/DRSeg.zip.partial`，得到2641097515字节、1378bb70c789730fe38b7a3dd28f47f36c63c4e3bafb7e89367a6232e647317b，与固定版本官方源端值一致。只读整包字节做哈希，未解包、读取test内容或运行模型。
 
 PID28779/28780仍运行，只剩PixDLM下载；最新日志约2.2GiB/12GiB（17%）、瞬时149KiB/s，磁盘约42G可用。单文件阶段进度行改为`[#gid ... DL:...]`；仅过滤`^[DL:`会取得过时的并发阶段快照，后续必须使用`grep -aE '^\[(DL:|#[0-9a-f])' ... | tail -n 3`同时覆盖两种进度格式。不能把过时日志或瞬时ETA当作实时保证。监控继续，未重启下载。
+
+## 2026-10-09 八连接续传
+
+用户要求先找到更快方案，再明确批准切换。对同一固定PixDLM权重做有界Range测速，不落盘：4连接直连镜像分别为0.503、0.528MiB/s；8连接完整接收32MiB，用时34.51秒、0.927MiB/s；经本地SSH代理4连接访问镜像/官方源分别为0.281/0.313MiB/s。短测支持优先增加直连并发，不代表全程带宽保证；代理隧道已关闭，不依赖本地电脑。
+
+切换前旧任务运行12459秒，日志约3.2GiB（25%）、155KiB/s。对aria2 PID28780发送INT，确认旧PID28779/28780均退出、.aria2断点于19:14:25（北京时间）保存后，才启动单文件8连接续传。新timeout PID34100、aria2 PID34101；限时30600秒，比原12小时剩余预算略短，不重置总时限。只续传PixDLM，已验收资产不重复下载，旧日志追加保留，文件/断点/备份不删除。
+
+```bash
+kill -INT 28780
+nohup timeout --signal=INT --kill-after=60s 30600 env -u http_proxy -u https_proxy -u all_proxy -u HTTP_PROXY -u HTTPS_PROXY -u ALL_PROXY aria2c --no-conf=true --continue=true --always-resume=true --check-integrity=true --allow-overwrite=false --auto-file-renaming=false --file-allocation=none --max-concurrent-downloads=1 --split=8 --max-connection-per-server=8 --min-split-size=16M --max-tries=12 --retry-wait=15 --connect-timeout=15 --timeout=60 --lowest-speed-limit=1K --auto-save-interval=30 --summary-interval=60 --console-log-level=notice --dir=/root/autodl-tmp/p1-prep/assets/pixdlm --out=pytorch_model.bin.partial --checksum=sha-256=fc3f8ec17e57c17068be371c33bbe06b156be779f0087a5bb63d9f658729b220 'https://hf-mirror.com/WhynotHug/PixDLM/resolve/f40fa586e28f644d5db19e6d8905f626a6b7fd13/pytorch_model.bin?download=true' >> /root/autodl-tmp/p1-prep/logs/aria2-resume-20261009.log 2>&1 < /dev/null &
+```
+
+启动日志显示CN:8、原25%断点续传、瞬时834KiB/s；断开SSH后重新连接，PID34100的PPID为1，aria2仍运行，进度增至3.3GiB（26%），最新两行均约1.4MiB/s，断点记录继续更新。磁盘约41G可用。仍未完成或核验PixDLM，不运行模型、训练或评测。巡检读取同一路径日志，但PID以准备清单的新任务为准。
