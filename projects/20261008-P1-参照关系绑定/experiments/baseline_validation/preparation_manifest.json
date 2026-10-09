@@ -113,16 +113,16 @@
       "repo": "WhynotHug/DRSeg",
       "repo_type": "dataset",
       "revision": "2b143f9a0721b7b5dbba4dd9f0bed9a22ede444d",
-      "expected_path": "/root/autodl-tmp/p1-prep/assets/drseg/DRSeg.zip.partial",
+      "path": "/root/autodl-tmp/p1-prep/assets/drseg/DRSeg.zip.partial",
       "file_exists": true,
-      "actual_bytes": 0,
+      "actual_bytes": 2641097515,
       "expected_complete_bytes": 2641097515,
       "expected_complete_sha256": "1378bb70c789730fe38b7a3dd28f47f36c63c4e3bafb7e89367a6232e647317b",
-      "complete": false,
-      "complete_hash_verified": false,
+      "complete": true,
+      "complete_hash_verified": true,
+      "actual_sha256": "1378bb70c789730fe38b7a3dd28f47f36c63c4e3bafb7e89367a6232e647317b",
       "correct_url": "https://hf-mirror.com/datasets/WhynotHug/DRSeg/resolve/2b143f9a0721b7b5dbba4dd9f0bed9a22ede444d/DRSeg.zip?download=true",
-      "status_at_last_check": "Correct dataset URL; approximately 40 MiB complete in aria2 log",
-      "actual_bytes_snapshot": "Before aria2 restart; not current completed-byte count"
+      "status_at_last_check": "Complete size and SHA256 match; independently checked during heartbeat; archive not opened"
     }
   ],
   "not_downloaded": [
