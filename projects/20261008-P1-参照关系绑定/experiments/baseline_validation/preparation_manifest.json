@@ -76,14 +76,14 @@
       "repo": "facebook/sam2.1-hiera-large",
       "revision": "665f8e2ad61cf5f53d65644ff27c8ee525124610",
       "path": "/root/autodl-tmp/p1-prep/assets/sam2/sam2.1_hiera_large.pt.partial",
-      "actual_bytes": 150288598,
+      "actual_bytes": 898083611,
       "expected_complete_bytes": 898083611,
       "expected_complete_sha256": "2647878d5dfa5098f2f8649825738a9345572bae2d4350a2468587ece47dd318",
-      "complete": false,
-      "complete_hash_verified": false,
+      "complete": true,
+      "complete_hash_verified": true,
+      "actual_sha256": "2647878d5dfa5098f2f8649825738a9345572bae2d4350a2468587ece47dd318",
       "previous_error": "curl 92: HTTP/2 stream CANCEL on original-source proxy download",
-      "status_at_last_check": "aria2 resumed; approximately 220 MiB complete in progress log",
-      "actual_bytes_snapshot": "Before aria2 restart; not current completed-byte count"
+      "status_at_last_check": "Complete size and SHA256 match; independently checked during heartbeat"
     },
     {
       "repo": "openai/clip-vit-large-patch14",
@@ -106,7 +106,7 @@
       "expected_complete_sha256": "fc3f8ec17e57c17068be371c33bbe06b156be779f0087a5bb63d9f658729b220",
       "complete": false,
       "complete_hash_verified": false,
-      "status_at_last_check": "Queued in aria2; existing prefix preserved",
+      "status_at_last_check": "Downloading; latest progress is reported by heartbeat, not apparent file length",
       "actual_bytes_snapshot": "Before aria2 restart; not current completed-byte count"
     },
     {
