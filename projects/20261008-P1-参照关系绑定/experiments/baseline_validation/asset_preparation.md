@@ -104,3 +104,17 @@ df -h /root/autodl-tmp
 ```
 
 stat因为DRSeg文件不存在返回非零，这与其他三个文件大小查询有效并不矛盾。日志记录SAM传输2487.980427秒、接收116734166新字节；Pix传输2261.150258秒、接收173391299字节；CLIP传输10576.412464秒、接收1710540580字节。不能由这些日志确认后台任务整体退出码或两个传输提前关闭的网络根因，不能声称因本地关机而失败。数据盘df报告50G总量、2.4G已用、48G可用。下一步修正dataset路径并使用可恢复的下载方式处理剩余资产；保留负结果和原日志，不无界重试。
+
+## 2026-10-09继续下载
+
+用户明确授权继续。复检无GPU、数据盘约48G可用。安装aria2 1.36.0：最初apt缓存无法定位软件包，刷新容器现有发行版源后成功安装aria2、libaria2-0、libc-ares2、libssh2-1（0个升级，4个新包）；未改Python/PyTorch或软件源配置。安装触发ldconfig报告平台NVIDIA空文件警告，未修复这些平台文件，不据此宣称推理兼容。
+
+下载输入文件：[resume_downloads.aria2](resume_downloads.aria2)，三个URI分别固定SAM、DRSeg（dataset路径已修正）与PixDLM；每项配置官方源端SHA256，排除已验收CLIP。通过scp传到数据盘，源/目标SHA256同为1e205db41b143ff10021fb1989bb77cf15b99061f71aba284f274c6faa951b99。为防首次接管时丢失已有前缀，分别保留SAM/PixDLM的.pre-aria2备份（150288598、173391299字节）；未覆盖旧日志。
+
+```bash
+nohup timeout --signal=INT --kill-after=60s 43200 env -u http_proxy -u https_proxy -u all_proxy -u HTTP_PROXY -u HTTPS_PROXY -u ALL_PROXY aria2c --no-conf=true --input-file=/root/autodl-tmp/p1-prep/resume_downloads.aria2 --continue=true --always-resume=true --check-integrity=true --allow-overwrite=false --auto-file-renaming=false --file-allocation=none --max-concurrent-downloads=2 --split=2 --max-connection-per-server=2 --min-split-size=16M --max-tries=12 --retry-wait=15 --connect-timeout=15 --timeout=60 --lowest-speed-limit=1K --auto-save-interval=30 --summary-interval=60 --console-log-level=notice > /root/autodl-tmp/p1-prep/logs/aria2-resume-20261009.log 2>&1 < /dev/null &
+```
+
+PID28779为timeout，28780为aria2；总12小时上限，到时先INT保存进度、60秒后必要时终止；每项最多12次尝试，不无限重启。每30秒保存.aria2控制文件；不支持续传时停止，不悄悄覆盖已有文件。下载完整后按配置SHA256校验；之后仍须审阅日志和实际大小，不能将.partial文件名或稀疏文件表观长度当作完成证据。原始日志含上游临时签名跳转URL，只留容器，不上传完整日志；检查进度时过滤DL行。
+
+断开SSH后重新连接：PID28779的PPID为1，28780仍运行；日志显示SAM约220MiB/856MiB、DRSeg约40MiB/2.4GiB，瞬时总速度约1.1MiB/s；两者.aria2控制文件已存在。说明SAM原前缀已接管、DRSeg正确地址实际开始传输。PixDLM在队列中；速度不是完成时间保证，所有未完整校验资产仍标未完成。数据盘报告约2.8G已用、48G可用，预期全部资产及备份仍保留10GiB余量。复检后退出SSH，无本地代理依赖、无模型运行。

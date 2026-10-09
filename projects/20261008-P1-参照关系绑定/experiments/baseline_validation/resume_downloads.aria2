@@ -1,0 +1,12 @@
+https://hf-mirror.com/facebook/sam2.1-hiera-large/resolve/665f8e2ad61cf5f53d65644ff27c8ee525124610/sam2.1_hiera_large.pt?download=true
+  dir=/root/autodl-tmp/p1-prep/assets/sam2
+  out=sam2.1_hiera_large.pt.partial
+  checksum=sha-256=2647878d5dfa5098f2f8649825738a9345572bae2d4350a2468587ece47dd318
+https://hf-mirror.com/datasets/WhynotHug/DRSeg/resolve/2b143f9a0721b7b5dbba4dd9f0bed9a22ede444d/DRSeg.zip?download=true
+  dir=/root/autodl-tmp/p1-prep/assets/drseg
+  out=DRSeg.zip.partial
+  checksum=sha-256=1378bb70c789730fe38b7a3dd28f47f36c63c4e3bafb7e89367a6232e647317b
+https://hf-mirror.com/WhynotHug/PixDLM/resolve/f40fa586e28f644d5db19e6d8905f626a6b7fd13/pytorch_model.bin?download=true
+  dir=/root/autodl-tmp/p1-prep/assets/pixdlm
+  out=pytorch_model.bin.partial
+  checksum=sha-256=fc3f8ec17e57c17068be371c33bbe06b156be779f0087a5bb63d9f658729b220
