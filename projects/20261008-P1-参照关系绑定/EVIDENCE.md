@@ -12,6 +12,8 @@
 
 ## 尚缺的证据
 
+2026-10-10加载核查：固定发布checkpoint用`torch.load(..., map_location="meta", weights_only=True, mmap=True)`读取参数键，共643个，`align_stages`相关键为0；不加载张量到GPU、不执行模型前向。容器deployment/models/pixdlm_align_stages.pth不存在。固定源码[multipath_encoder_wapper.py](https://huggingface.co/WhynotHug/PixDLM/blob/f40fa586e28f644d5db19e6d8905f626a6b7fd13/model/llava/multimodal_encoder/multipath_encoder_wapper.py)第200–214行在文件缺失时传空权重字典，最终融合用的MultiPathAlignModule两项Linear没有被该checkpoint覆盖。固定revision官方HF API列出的权重资产只有pytorch_model.bin，与已验收大小/hash一致。由此不能把当前部署当作完整发布baseline；不据此推断论文结果无效或P1方向失败。原始键计数回执在`/root/autodl-tmp/p1-prep/logs/prelaunch-weight-audit-20261010.json`，SHA256 `0dbf0df4c3ebbadea1d19ad9d1cd02a8f5fda8ee7d5baacef3f54a6062d25f30`。
+
 - 权重/数据落地哈希、预处理与 evaluator 对齐、实际输入日志、自己的复现数字。
 - 在未按错误结果挑样的固定样本上，关系可辨且目标混绑的频率。
 - 相同监督与预算的简单位置方案是否消除混绑。
