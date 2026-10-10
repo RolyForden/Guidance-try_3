@@ -9,6 +9,9 @@ source_private/
 **/__pycache__/
 **/.pytest_cache/
 tmp/
+**/scratch/
+**/prep/
+*.aria2
 *.zip
 *.tar
 *.tar.gz
