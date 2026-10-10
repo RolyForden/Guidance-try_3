@@ -8,7 +8,7 @@
 - 输入：[底座档案草稿](../../idea/base_paper_PixDLM.md)。
 - 来源版本：HF f40fa586e28f644d5db19e6d8905f626a6b7fd13；GitHub 400aaeaec7b3a2dfa91aab0c60b7534c68199061另记，禁止默认互换。
 - 数据版本：DRSeg 2b143f9a0721b7b5dbba4dd9f0bed9a22ede444d；split=validation（源码参数为custom_seg|val）；整包SHA256已核，validation样本清单尚未生成。
-- 源码副本：PixDLM-question-only-f40fa58；补丁/适配器/回归脚本与修改前后SHA256见preparation_manifest.json。模型运行配置及命令仍待冻结。
+- 源码副本：PixDLM-generation-aligned-f40fa58（保留原HF和两处传递修复副本）；补丁/适配器/回归脚本与修改前后SHA256见preparation_manifest.json。模型运行配置及命令仍待冻结。
 
 ## 1. 预注册
 - 唯一问题：公开PixDLM 7B能否在不读取标注回答作为模型输入、预处理与指标可追溯的条件下，产生可信validation预测？本轮不回答参照机制是否有效。
@@ -42,7 +42,7 @@
 - 输入：RGB+原问题；GT mask仅评分，answers/CoT标注禁止模型读取；仅自身生成文本可参与后续分割。
 - 官方脚本scripts/eval_drseg.sh默认custom_seg|test，禁止直接运行。精确validation入口及生成/分割token路径待核，不能只把answers置空后假定有效。
 - 最小修复（已确认并实现）：question_only.py只接收单样本RGB张量、几何元数据和原问题，文本特征仅由原问题经同一语言骨干构造，助手回复为空，接口拒绝answers/GT参数；pixdlm_question_only.patch补齐两处txt_feat传递。local_model_config只映射两项CLIP路径，加载前显式设置PIXDLM_ROOT，原HF快照不改。不改HRD、loss、阈值、分辨率或绕过文本融合，不称未经修改的官方复现。CPU回归不替代实际模型的GT隔离检查。
-- 仍需解决：固定Transformers的generation.hidden_states为嵌套tuple，evaluate将最后一步整体传入text_hidden_fcs；需核对最后层与生成序列/分割token对齐。本轮不把这项未获审查的改动塞进两处特征补丁，也不以回归通过宣称完整生成可运行。
+- 额外工程修复单独记录：pixdlm_generation_alignment.patch保留实际加载的缓存模式，拼接每步最后层并严格检查SEG位置长度。5项合成张量/改动范围检查和9项输入回归通过；仍需固定Transformers真实缓存生成、视觉token长度及发布模型验收，不以工程回归宣称完整生成可运行。
 - 预处理：保留固定版本的448配置及细节路径原处理；原图/resize/pad/坐标逆变换逐项记录，不靠图示猜。
 - 权重：发布权重仅作底座诊断；正式20%训练baseline不能从全DRSeg微调权重开始。
 - 本轮训练/收敛：不适用，无训练；若资产必须训练才能使用，停报另批。

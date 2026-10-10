@@ -5,7 +5,7 @@
   "environment": {
     "path": "/root/autodl-tmp/p1-prep/env",
     "python": "3.10.22",
-    "pip_check": "No broken requirements found",
+    "pip_check": "Previous lightweight installation: No broken requirements found; pending recheck after full runtime installation",
     "inference_ready": false,
     "packages": {
       "antlr4-python3-runtime": "4.9.3",
@@ -141,10 +141,63 @@
       "failed_fixture_log": "/root/autodl-tmp/p1-prep/logs/question-only-regression-20261010.log"
     },
     "remaining_checks": [
-      "Generation hidden_states nested-tuple versus evaluate tensor projection and SEG alignment",
+      "Actual fixed Transformers generation and published-model SEG alignment; synthetic CPU assembly checks passed separately",
       "Independent inference dependencies, checkpoint loading keys and RGB preprocessing",
       "Approved single-sample model run and real GT isolation; no model acceptance yet"
     ]
+  },
+  "generation_alignment_repair": {
+    "source_path": "/root/autodl-tmp/p1-prep/source/PixDLM-generation-aligned-f40fa58",
+    "parent_source": "/root/autodl-tmp/p1-prep/source/PixDLM-question-only-f40fa58",
+    "scope": "Separate engineering fix: preserve loaded cache=True, concatenate final-layer states over generation steps, reject SEG length mismatch; no architecture/loss/metric changes",
+    "loaded_generation_config_use_cache": true,
+    "checkpoint_model_config_use_cache": false,
+    "patch": "pixdlm_generation_alignment.patch",
+    "apply_command": "git apply --verbose --unidiff-zero pixdlm_generation_alignment.patch (in a fresh copy of parent_source)",
+    "patch_sha256": "148934aeedef8f5496483b607b9095af5a2f4d9ce8636241538e7d5400607c42",
+    "modified_file": "model/PixDLM.py",
+    "before_sha256": "61e92f483d772e87e5edff97609f0aa9928d90ed4fa7bf5d38ad72153204d626",
+    "after_sha256": "ff30b7063ca793247c4d925bb8812fd0dfb9150c63b43ff10fb96c66075e7ca5",
+    "regression_script": "test_generation_alignment.py",
+    "regression_script_sha256": "e1ee4a6bf243b642b3d29ef7569c7dd42840c6163eb0448735138552717fc241",
+    "regression": {
+      "python": "/root/miniconda3/bin/python",
+      "torch_version": "2.8.0+cu128",
+      "device": "cpu",
+      "fixtures": "Synthetic cached prefill and one-token hidden states; no published model or data",
+      "command": "/root/miniconda3/bin/python /root/autodl-tmp/p1-prep/patches/question-only-v1/test_generation_alignment.py --source /root/autodl-tmp/p1-prep/source/PixDLM-generation-aligned-f40fa58",
+      "tests": 5,
+      "failures": 0,
+      "skipped": 0,
+      "exit_code": 0,
+      "log": "/root/autodl-tmp/p1-prep/logs/generation-alignment-accepted-20261010.log",
+      "log_sha256": "74c134e6653c0686f7b3eadb055a5df8dbd020137c4bd365a8973218b2085a32",
+      "red_log": "/root/autodl-tmp/p1-prep/logs/generation-alignment-red-20261010.log",
+      "red_tests": 4,
+      "red_failures": 4,
+      "active_source_adapter_tests": 9,
+      "active_source_adapter_failures": 0,
+      "active_source_adapter_skipped": 0,
+      "active_source_adapter_command": "/root/miniconda3/bin/python /root/autodl-tmp/p1-prep/patches/question-only-v1/test_minimal_repair.py --source /root/autodl-tmp/p1-prep/source/PixDLM-generation-aligned-f40fa58 AdapterTests SourceContractTests.test_generation_prefill_preserves_text_features SourceContractTests.test_generation_cached_step_preserves_text_features SourceContractTests.test_generation_embeds_prefill_preserves_text_features SourceContractTests.test_evaluate_supplies_text_features_to_generate -v",
+      "active_source_adapter_log": "/root/autodl-tmp/p1-prep/logs/question-only-active-source-20261010.log",
+      "active_source_adapter_log_sha256": "a38f32b937f8e5ff0bfa3a4461e4217fd95bd1f73eb40aafa71a5d55567c7a88"
+    },
+    "raw_and_two_fix_snapshots_retained": true,
+    "actual_transformers_generation_and_model_loading_verified": false
+  },
+  "runtime_installation": {
+    "requirements": "runtime_requirements.txt",
+    "requirements_sha256": "bf5dac38ff8fd7524dcef007c341a54603c427321d8dd0dcabd896136e2ef285",
+    "timeout_pid": 62207,
+    "pip_pid": 62208,
+    "confirmed_live": true,
+    "completed": false,
+    "timeout_seconds": 28800,
+    "command": "nohup timeout --signal=INT --kill-after=60s 28800 env DS_BUILD_OPS=0 TMPDIR=/root/autodl-tmp/p1-prep/tmp /root/autodl-tmp/p1-prep/env/bin/python -m pip install --index-url https://pypi.org/simple --extra-index-url https://download.pytorch.org/whl/cu124 --no-cache-dir --disable-pip-version-check --retries 1 --timeout 30 --requirement /root/autodl-tmp/p1-prep/runtime_requirements.txt",
+    "log": "/root/autodl-tmp/p1-prep/logs/runtime-install-20261010.log",
+    "sam2_source_installation_pending": true,
+    "pip_check_and_import_acceptance_pending": true,
+    "free_disk_at_last_check": "27G (df -h, rounded)"
   },
   "training_initialization": {
     "recipe": "Fixed HF PixDLM scripts/train_drseg.sh --base-model; do not initialize 20% screening from full-DRSeg fine-tuned PixDLM",

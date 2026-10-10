@@ -176,3 +176,9 @@ sha256sum /root/autodl-tmp/p1-prep/assets/pixdlm/pytorch_model.bin.partial
 训练前准备继续：官方scripts/train_drseg.sh的初始化是LLaVA-v1.6-vicuna-7b，而非发布PixDLM微调权重。固定初始化revision、三片大小与SHA256已交叉核对官方HF和镜像API，合计14125909456字节；10项小文件核对上游blob/LFS通过。数据盘复检约32G可用后，以单文件8连接启动独立可恢复下载（最多12次网络尝试、12小时防失联时限，不作为算力/费用门槛）；timeout/aria2 PID60996/60997已确认运行，timeout的PPID为1。最新日志首片178MiB、瞬时328KiB/s，不承诺完成时间，不能将稀疏文件长度作为进度。
 
 仅按白名单解包DRtrain、DRval图像及两个对应JSON，映射到源码要求的CODrone/DRtrain、CODrone/DRval和labels目录；拒绝覆盖现有目标、检查路径和容量，共5001文件/1387090468字节，zip CRC读取无异常。结构检查2999/2000记录各有1题、问答长度匹配、ID唯一、图像路径全部存在，两split的ID交集为0；尚未核查图像字节重复或场景簇，不能据此宣称无数据泄漏。只读取归档目录元数据及train/val，未解包或读取test样本。原始标签哈希、路径与下载句柄见准备清单；未训练或评测，SSH已退出。
+
+生成对齐修复单独保存在PixDLM-generation-aligned-f40fa58，原HF快照及两处传递修复副本不变。实际GenerationConfig.from_pretrained加载结果use_cache=True，虽模型config.json为false，不能混同两者。固定缓存模式，将每步最后层沿序列维拼接，检查三维张量及长度等于输出token数减1加视觉额外token数；异常直接报错，不静默裁剪/填充。单独补丁需git apply --unidiff-zero；不改结构、损失、指标或生成token上限。
+
+原副本4项针对性检查全部失败；修复副本5项检查与9项question-only输入回归在基础Python/PyTorch CPU通过，零跳过，包含修改范围AST核对。使用合成缓存张量，不是实际Transformers生成或发布模型验收；相关命令、哈希及保留的红/绿日志见清单。本地张量检查仍跳过，不据此报完整通过。
+
+独立Python3.10环境按runtime_requirements.txt启动固定22项直接依赖安装；Torch2.5.1/CUDA12.4与torchvision0.20.1配对，Transformers保持4.31.0，禁用DeepSpeed预编译算子。安装8小时工程防挂死、网络最多1次重试，不启动模型或训练；timeout/pip PID62207/62208确认仍运行，结果、pip check与源码导入尚未验收，SAM2安装仍待完成。训练初始化aria2仍运行，最近首片42%、702KiB/s，不能据此称完整资产就绪；数据盘约27G可用。
