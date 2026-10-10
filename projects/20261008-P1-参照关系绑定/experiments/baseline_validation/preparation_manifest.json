@@ -8,19 +8,103 @@
     "pip_check": "No broken requirements found",
     "inference_ready": false,
     "packages": {
+      "antlr4-python3-runtime": "4.9.3",
       "certifi": "2026.7.22",
       "charset-normalizer": "3.5.2",
+      "einops": "0.8.0",
       "filelock": "4.0.12",
       "fsspec": "2026.9.0",
       "huggingface-hub": "0.26.5",
+      "hydra-core": "1.3.2",
       "idna": "3.20",
+      "iopath": "0.1.10",
+      "numpy": "1.26.4",
+      "omegaconf": "2.3.0",
       "packaging": "26.3",
+      "pillow": "10.4.0",
+      "pip": "26.2.1",
+      "portalocker": "4.4.0",
+      "protobuf": "4.25.3",
       "PyYAML": "6.0.3",
+      "regex": "2026.9.29",
       "requests": "2.34.2",
+      "safetensors": "0.4.5",
+      "sentencepiece": "0.1.99",
+      "setuptools": "83.0.0",
+      "tokenizers": "0.13.3",
       "tqdm": "4.70.1",
+      "transformers": "4.31.0",
       "typing_extensions": "4.16.0",
-      "urllib3": "2.8.0"
+      "urllib3": "2.8.0",
+      "wheel": "0.47.0"
     }
+  },
+  "source_preparation": {
+    "pixdlm": {
+      "repo": "WhynotHug/PixDLM",
+      "revision": "f40fa586e28f644d5db19e6d8905f626a6b7fd13",
+      "path": "/root/autodl-tmp/p1-prep/source/PixDLM-hf-f40fa58",
+      "selected_files": 97,
+      "total_bytes": 1314162,
+      "selection": "Files under 8 MiB with code/config/doc suffixes or license/git metadata names; excludes the already verified model weight",
+      "upstream_file_hashes_verified": true,
+      "inventory_sha256": "1c29ca6fa14c64194b4a64727549ce0711268208b382175849d7caa0bc1dad39",
+      "inventory_format": "Upstream sibling order, rows of path/bytes/sha256, JSON sort_keys=true and compact separators",
+      "python_ast_files_passed": 69,
+      "github_variant_equivalence_verified": false
+    },
+    "sam2": {
+      "repo": "https://github.com/facebookresearch/sam2",
+      "commit": "2b90b9f5ceec907a1c18123530e92e794ad901a4",
+      "pin_origin": "Official GitHub API HEAD; original PixDLM release does not pin this dependency",
+      "path": "/root/autodl-tmp/p1-prep/source/sam2-2b90b9f",
+      "archive_sha256": "1f2fbfad3ffa38110368abac76c6ef9df9c282a66d5c2807bc94abf4d2fb30f8",
+      "config": "sam2/configs/sam2.1/sam2.1_hiera_l.yaml",
+      "config_sha256": "1dbd6cb6dfebeaf588c7006ee222c6efbfa9049a7ad472a3cdfb2f5d919e8107",
+      "runtime_compatibility_verified": false
+    },
+    "clip_config": {
+      "repo": "openai/clip-vit-large-patch14",
+      "revision": "32bd64288804d66eefd0ccbe215aa642df71cc41",
+      "path": "/root/autodl-tmp/p1-prep/source/clip-config-32bd642",
+      "files": [
+        {
+          "path": "config.json",
+          "bytes": 4519,
+          "sha256": "8a09b467700c58138c29d53c605b34ebc69beaadd13274a8a2af8ad2c2f4032a",
+          "upstream_git_blob_match": true
+        },
+        {
+          "path": "preprocessor_config.json",
+          "bytes": 316,
+          "sha256": "910e70b3956ac9879ebc90b22fb3bc8a75b6a0677814500101a4c072bd7857bd",
+          "upstream_git_blob_match": true
+        }
+      ]
+    }
+  },
+  "deployment": {
+    "root": "/root/autodl-tmp/p1-prep/deployment",
+    "method": "Non-overwriting symlinks to verified weights, configs and source; no duplicate large files",
+    "broken_symlinks": 0,
+    "pixdlm_checkpoint": "/root/autodl-tmp/p1-prep/deployment/pretrained/pixdlm-7b",
+    "clip": "/root/autodl-tmp/p1-prep/deployment/models/clip-vit-large-patch14",
+    "raw_upstream_configs_modified": false,
+    "local_vision_tower_config_mapping_pending": true
+  },
+  "preflight_checks": {
+    "tokenizer_local_load": true,
+    "tokenizer_size": 32015,
+    "clip_processor_and_config_local_load": true,
+    "pixdlm_config_metadata_checked": true,
+    "generic_auto_config_load": "KeyError llava; custom model registration not yet performed",
+    "generation_txt_feat_propagation": "Missing at evaluate->generate and prepare_inputs_for_generation; isolated helper confirmed loss; not patched",
+    "model_loaded": false,
+    "training_or_evaluation_run": false,
+    "gpu_visible": false,
+    "memory_limit_bytes": 2147483648,
+    "cpu_quota_cores": 0.5,
+    "data_disk_free_approx_gib": 32
   },
   "small_assets": {
     "repo": "WhynotHug/PixDLM",
@@ -127,7 +211,7 @@
     }
   ],
   "not_downloaded": [
-    "Complete baseline source code"
+    "Remaining model runtime dependencies, including PyTorch/torchvision"
   ],
   "background_download_running": false,
   "background_job": {

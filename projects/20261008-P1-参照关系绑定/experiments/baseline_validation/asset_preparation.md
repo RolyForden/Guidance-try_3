@@ -156,3 +156,13 @@ sha256sum /root/autodl-tmp/p1-prep/assets/pixdlm/pytorch_model.bin.partial
 结果为13611289441字节、fc3f8ec17e57c17068be371c33bbe06b156be779f0087a5bb63d9f658729b220，与固定版本官方期望值一致。SAM、DRSeg、CLIP此前已独立验收，未重复下载。数据盘约32G可用，保留.partial文件名、前缀备份与原日志。当前无下载进程，实时下载速度不适用；不由日志猜测timeout整体退出码。
 
 四项大资产全部验收，停止本聊天的下载巡检；本轮未解包DRSeg、读取test、追加安装或运行模型。完整源码和推理依赖仍待准备，不能把下载完成称为复现成功。
+
+## 2026-10-10 源码与轻量依赖准备
+
+- 固定HF revision下载97个代码/配置/文档文件，共1314162字节，逐文件核对上游Git blob或LFS大小/SHA256通过；69个Python文件AST解析通过。远端路径、清单摘要哈希见preparation_manifest.json；本地审查副本仅在忽略的runs/source_audit内，不提交上游源码。
+- GitHub连接先因HTTP/2错误失败，随后用官方API固定SAM2 commit并从官方codeload下载；源码与配置哈希已记录。这是补齐原发布目录缺失的外部依赖，兼容性尚未经模型运行验收。CLIP两项小配置也与固定revision的上游blob核对一致，未重下载权重。
+- 独立环境安装transformers 4.31.0等轻量依赖成功；`python -m pip check`报告无依赖冲突，离线tokenizer长度32015，CLIP处理器/配置加载通过。前次包含OpenCV等的安装240秒超时（exit124），未完成安装；失败日志runtime-light-install-20261010.log保留。成功安装日志preflight-deps-install-20261010.log均在数据盘logs内；实际包版本见清单。
+- 通用AutoConfig加载Pix配置报KeyError: llava；该自定义类型需官方模型注册，不能以通用入口宣称加载成功。后续仅用JSON检查model_type=llava、hidden_size=4096、vocab_size=32015。没有加载模型；独立环境仍无PyTorch。
+- deployment目录用软链接复用已验收权重/配置/SAM2源码，检查无失效链接；需显式设置PIXDLM_ROOT及本地CLIP配置映射。原HF配置未改，数据包未解压。
+- 静态审查及隔离执行官方generation helper确认：PixDLM.evaluate的generate调用不传txt_feat，prepare_inputs_for_generation也不保留它。未写补丁；最小question-only修复设计列入experiment.md v0.4待确认，不能直接跑默认test或只改split。
+- 复检仍无GPU、0.5核/2GiB内存、磁盘约32G可用；SSH已退出。未训练、评测或读取test，推理环境尚未就绪。

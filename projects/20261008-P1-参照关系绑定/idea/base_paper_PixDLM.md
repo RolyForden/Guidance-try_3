@@ -5,13 +5,13 @@
 ## 0. 身份
 - 论文：PixDLM: A Dual-Path Multimodal Language Model for UAV Reasoning Segmentation，作者标注 CVPR 2026；本地为 arXiv 2604.15670v2，不假定等于会议最终版。
 - 原文：[本地 PDF](../../PixDLM_研究调研与候选计划_2026-10-08(1)/2604.15670v2(1).pdf)；前轮核验 SHA256=C494F1936030124A4471CF201D6345B76469A1A60D57D0DDC4666FC3160377E1。
-- 官方 GitHub HEAD：400aaeaec7b3a2dfa91aab0c60b7534c68199061；本轮只查询 remote，未 clone。
-- 拟核公开7B版本：[HF](https://huggingface.co/WhynotHug/PixDLM/tree/f40fa586e28f644d5db19e6d8905f626a6b7fd13)，与 GitHub 内容一致性待核；权重本地路径/哈希待提供。
-- DRSeg revision：2b143f9a0721b7b5dbba4dd9f0bed9a22ede444d；本地路径/解包清单/哈希待提供。未读取 test 样本。
+- 官方 GitHub HEAD：此前查询为400aaeaec7b3a2dfa91aab0c60b7534c68199061；未clone该版本，不与本轮HF快照默认互换。
+- 拟核公开7B版本：[HF](https://huggingface.co/WhynotHug/PixDLM/tree/f40fa586e28f644d5db19e6d8905f626a6b7fd13)，固定HF源码与权重均已下载、核对源端哈希；与 GitHub 内容一致性仍待核。路径与校验值见[准备清单](../experiments/baseline_validation/preparation_manifest.json)。
+- DRSeg revision：2b143f9a0721b7b5dbba4dd9f0bed9a22ede444d；整包已验收，路径与SHA256见准备清单，尚未解包。未读取 test 样本。
 - evaluator：公开 eval.py 静态审查见项目 EVIDENCE；干净输入版本尚未实现/验收。
 
 ## 1. 复现
-- 命令和日志：尚无已执行命令或日志；确切命令待资产与补丁核定，不把官方默认 test 命令当作本轮入口。
+- 模型命令和日志：尚无；准备命令与检查摘要见[资产准备记录](../experiments/baseline_validation/asset_preparation.md)。确切推理命令待依赖与补丁核定，不把官方默认 test 命令当作本轮入口。
 - 我的数字：未运行。论文 test 分组 gIoU/cIoU：属性62.80/62.84、场景61.75/64.03、空间62.51/62.80，仅作原文参考。
 - 口径差异：论文正文13B与公开7B、test与拟用validation、回答条件输入与拟用question-only均需分开；不能用数值接近消除这些差异。
 - 本轮目标是公开版本的可信validation基线；严格论文量级复现仍待同配置、同口径的另行协议，未验收。
