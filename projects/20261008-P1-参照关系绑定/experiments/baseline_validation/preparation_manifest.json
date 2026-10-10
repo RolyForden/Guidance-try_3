@@ -197,6 +197,14 @@
     "log": "/root/autodl-tmp/p1-prep/logs/runtime-install-20261010.log",
     "sam2_source_installation_pending": true,
     "pip_check_and_import_acceptance_pending": true,
+    "checkpoint_api_audit": {
+      "package_source_version": "0.15.4",
+      "file": "deepspeed/runtime/engine.py (downloaded pip source, not installed runtime acceptance)",
+      "sha256": "b4853189c5c5f5b3669a482778a2f44864cab7c0e863cf91ee158ec4d9a955b9d",
+      "save_checkpoint_exclude_frozen_parameters_supported_in_source": true,
+      "storage_change_implemented": false,
+      "actual_checkpoint_save_restore_verified": false
+    },
     "free_disk_at_last_check": "27G (df -h, rounded)"
   },
   "training_initialization": {
@@ -245,7 +253,7 @@
     "path": "/root/autodl-tmp/p1-prep/datasets/DRSeg",
     "extracted_files": 5001,
     "expanded_bytes": 1387090468,
-    "split_policy": "Only train/val images and labels extracted; original split preserved, no screening subset selected yet",
+    "split_policy": "Original train/val preserved; proposed screening manifest only, not approved or materialized as a training dataset",
     "train_rows": 2999,
     "val_rows": 2000,
     "train_labels_sha256": "00d23b81779287c28895c0f658b285a33735d892a56de63efbea849a324b07e3",
@@ -255,7 +263,31 @@
     "train_val_id_overlap": 0,
     "questions_per_row": 1,
     "question_answer_length_mismatches": 0,
-    "image_byte_duplicates_or_scene_groups_checked": false,
+    "encoded_image_byte_duplicates_checked": true,
+    "train_unique_image_hashes": 2999,
+    "val_unique_image_hashes": 2000,
+    "cross_split_exact_duplicate_hash_groups": 0,
+    "near_duplicates_or_true_scene_disjointness_verified": false,
+    "shared_acquisition_metadata_keys": 576,
+    "train_sequence_id_missing_rows": 1215,
+    "val_sequence_id_missing_rows": 846,
+    "audit": "train-val-data-audit-20261010.json",
+    "audit_remote_path": "/root/autodl-tmp/p1-prep/logs/train-val-data-audit-20261010.json",
+    "audit_sha256": "b4513c9c35f008c2eb089661bc74d0b6b3c64ff762931f9e8decbedfbfc4ffb8",
+    "screening_proposal": {
+      "manifest": "p1_screen20_manifest.json",
+      "remote_path": "/root/autodl-tmp/p1-prep/datasets/proposals/p1_screen20_manifest.json",
+      "sha256": "5947d8c48b62b5bf776c85654af25e356bd0f3eb19a2a788cba2dfd0db7cd338",
+      "status": "Proposed only; not approved, original dataset unchanged",
+      "train_images": 604,
+      "development_images": 302,
+      "source": "Original train only; official val preserved and not for checkpoint selection",
+      "sampling_seed": 20261008,
+      "sampling_unit": "Whole acquisition-metadata proxy groups, not verified independent scenes",
+      "readback_unique_ids_counts_and_whole_groups_verified": true,
+      "id_and_proxy_group_overlap": 0,
+      "protocol": "training_experiment.md"
+    },
     "test_extracted": false,
     "test_sample_content_read": false
   },
@@ -271,7 +303,7 @@
     "gpu_visible": false,
     "memory_limit_bytes": 2147483648,
     "cpu_quota_cores": 0.5,
-    "data_disk_free_approx_gib": 32
+    "data_disk_free_approx_gib": 27
   },
   "small_assets": {
     "repo": "WhynotHug/PixDLM",

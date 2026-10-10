@@ -10,6 +10,7 @@
 - 未知：底座复现量级、真实混绑频率、简单对照收益。
 - 放弃条件：可靠基线不支持混绑假设，或匹配简单对照消除主要问题时，暂停本版参照绑定提案；不外推否定所有关系方法。
 - 当前状态（2026-10-10训练前准备）：两处txt_feat修复及question-only适配器10项CPU工程回归通过；独立生成对齐副本的5项拼接/边界/改动范围检查和9项输入回归通过，均未运行发布模型。DRSeg仅train/val已解包，2999/2000条记录的图像路径、唯一ID及问答长度核验通过，两split的ID交集为0；test未解包或读取内容。官方训练脚本使用LLaVA-v1.6-vicuna-7b初始化，不可用全DRSeg微调后的PixDLM权重做20%训练起点；固定初始化三片权重仍在下载。固定运行依赖正在独立环境安装，尚未验收；真实生成、模型加载及正式训练协议仍待完成，未训练或评测。
+- 数据准备新增：4999张train/val图像逐文件SHA256无完全重复，但sequence_id不完整且共享采集元数据，不能称场景独立或无近重复。已生成待审604图训练/302图内部development整代理组清单及预填训练协议，原数据未改写、未开跑；用户只需审批，不填表。
 
 ## 约束
 
@@ -27,6 +28,7 @@
 - 原稿与本地论文位于用户的未跟踪导入目录；本次仅提交主 agent 准备文件，不上传这些原件。相关相对链接仅在当前本地材料齐全时可用。
 - 论文底座档案：[PixDLM 草稿](idea/base_paper_PixDLM.md)。
 - 当前实验冻结记录：[首轮底座协议草稿](experiments/baseline_validation/experiment.md)，尚未冻结、无运行结果。
+- 训练准备：[20% baseline预填协议](experiments/baseline_validation/training_experiment.md)，含提议子集、内部development、两seed及收敛默认建议；依赖、真实链路和存储验收后再交最终版本审批，当前不是训练ready。
 - 执行准备：[容器预检](experiments/baseline_validation/preflight.md)，只含脱敏环境摘要，不含连接凭据。
 - 已批准准备范围：[无卡资产准备](experiments/baseline_validation/asset_preparation.md)；不等于批准训练、test或未冻结协议的评测。
 - 后续混绑验证的判据与标注规则：[P1 最小验证设计](idea/p1_validation_design.md)，不是运行授权。

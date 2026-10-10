@@ -5,3 +5,5 @@ training_initialization.aria2 text eol=lf
 runtime_requirements.txt text eol=lf
 test_generation_alignment.py text eol=lf
 pixdlm_generation_alignment.patch text eol=lf
+train-val-data-audit-20261010.json text eol=lf
+p1_screen20_manifest.json text eol=lf

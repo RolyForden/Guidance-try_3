@@ -1,0 +1,62 @@
+{
+  "acquisition_keys_are_not_verified_scene_ids": true,
+  "cross_split_exact_duplicate_hash_groups": 0,
+  "cross_split_exact_duplicate_pairs": [],
+  "elapsed_seconds": 5.53,
+  "scope": "train/val only; exact encoded-byte duplicates, not near-duplicate or semantic scene audit",
+  "shared_acquisition_metadata_keys": 576,
+  "splits": {
+    "train": {
+      "acquisition_metadata_key_count": 646,
+      "duplicate_hash_groups": 0,
+      "hashed_image_bytes": 827324196,
+      "label_sha256": "00d23b81779287c28895c0f658b285a33735d892a56de63efbea849a324b07e3",
+      "reasoning_type_counts": {
+        "attribute": 1000,
+        "scene": 1000,
+        "spatial": 999
+      },
+      "rows": 2999,
+      "sequence_id_counts": {
+        "1": 123,
+        "10": 4,
+        "2": 768,
+        "3": 449,
+        "4": 173,
+        "5": 139,
+        "6": 66,
+        "7": 40,
+        "8": 13,
+        "9": 9
+      },
+      "sequence_id_missing_rows": 1215,
+      "unique_image_hashes": 2999
+    },
+    "val": {
+      "acquisition_metadata_key_count": 606,
+      "duplicate_hash_groups": 0,
+      "hashed_image_bytes": 546772871,
+      "label_sha256": "08756234cd6e36265621770b7864aa1c5d94640ec7c8c9a2e3e87f6e8b4e7a33",
+      "reasoning_type_counts": {
+        "attribute": 667,
+        "scene": 666,
+        "spatial": 667
+      },
+      "rows": 2000,
+      "sequence_id_counts": {
+        "1": 80,
+        "10": 2,
+        "2": 506,
+        "3": 290,
+        "4": 96,
+        "5": 92,
+        "6": 51,
+        "7": 19,
+        "8": 10,
+        "9": 8
+      },
+      "sequence_id_missing_rows": 846,
+      "unique_image_hashes": 2000
+    }
+  }
+}

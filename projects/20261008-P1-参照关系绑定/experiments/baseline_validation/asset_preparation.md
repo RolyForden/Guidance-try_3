@@ -182,3 +182,7 @@ sha256sum /root/autodl-tmp/p1-prep/assets/pixdlm/pytorch_model.bin.partial
 原副本4项针对性检查全部失败；修复副本5项检查与9项question-only输入回归在基础Python/PyTorch CPU通过，零跳过，包含修改范围AST核对。使用合成缓存张量，不是实际Transformers生成或发布模型验收；相关命令、哈希及保留的红/绿日志见清单。本地张量检查仍跳过，不据此报完整通过。
 
 独立Python3.10环境按runtime_requirements.txt启动固定22项直接依赖安装；Torch2.5.1/CUDA12.4与torchvision0.20.1配对，Transformers保持4.31.0，禁用DeepSpeed预编译算子。安装8小时工程防挂死、网络最多1次重试，不启动模型或训练；timeout/pip PID62207/62208确认仍运行，结果、pip check与源码导入尚未验收，SAM2安装仍待完成。训练初始化aria2仍运行，最近首片42%、702KiB/s，不能据此称完整资产就绪；数据盘约27G可用。
+
+补做train/val全部4999图的文件字节SHA256审计：各split内和跨split均无完全重复文件；不是像素近重复或独立场景证明。train的sequence_id缺1215/2999行，val缺846/2000行，两split共享576种采集元数据组合，不能因ID不重合宣称无泄漏。机器可读摘要、哈希见准备清单；未读test。
+
+只从原train生成待审整采集元数据代理组清单：seed20261008，按(time_of_day,location,altitude,camera_angle,sequence_id)成组、固定SHA256定序；训练604图/139组、内部development302图/61组，两集合ID及代理组无交集，三题型均有覆盖。清单回读核对计数、唯一性和整组归属通过；原训练/官方val文件未改写，无训练数据目录切换。代理组并非已核实scene，协议明确披露相关性边界，默认建议见training_experiment.md，审批前不运行。源码另显示last/best均保存完整DeepSpeed状态，当前盘容量是否够用须在真实参数/保存恢复验收中核定，不以skip_save绕过。
