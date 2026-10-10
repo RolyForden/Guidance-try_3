@@ -90,7 +90,61 @@
     "pixdlm_checkpoint": "/root/autodl-tmp/p1-prep/deployment/pretrained/pixdlm-7b",
     "clip": "/root/autodl-tmp/p1-prep/deployment/models/clip-vit-large-patch14",
     "raw_upstream_configs_modified": false,
-    "local_vision_tower_config_mapping_pending": true
+    "local_vision_tower_config_mapping_pending": false,
+    "config_mapping_checked_against_actual_assets": true,
+    "explicit_pixdlm_root_required_at_model_loading": true
+  },
+  "minimal_repair": {
+    "approved_date": "2026-10-10",
+    "scope": "Question-only RGB input whitelist, two txt_feat propagation repairs, local CLIP config mapping; no model architecture/loss/metric changes",
+    "source_path": "/root/autodl-tmp/p1-prep/source/PixDLM-question-only-f40fa58",
+    "artifacts_path": "/root/autodl-tmp/p1-prep/patches/question-only-v1",
+    "patch": "pixdlm_question_only.patch",
+    "patch_sha256": "4738fd6b2b4f625c193d878a03887839da2fa7b0eb3a0e3231fa7ab337231b29",
+    "adapter": "question_only.py",
+    "adapter_sha256": "53e6a4629f4f24f2a0339c6d6f4c08180dc9a74a3564f444d2a0098f51bd6ab4",
+    "regression_script": "test_minimal_repair.py",
+    "regression_script_sha256": "dc0ba74fd01d1e6237cb0a906c02965d6bd8000e790acfa71585b74982d6d6fb",
+    "source_files": [
+      {
+        "path": "model/PixDLM.py",
+        "before_sha256": "e3ec1bf1e18b215d29ab8e0ccf549a42579db3fd7b1a511f10ab498bd35afda5",
+        "after_sha256": "61e92f483d772e87e5edff97609f0aa9928d90ed4fa7bf5d38ad72153204d626"
+      },
+      {
+        "path": "model/llava/language_model/llava_llama.py",
+        "before_sha256": "1c8248edfe3d0c3c026d2a46c783dc5e02f320150da72850f85fd5c2737b089d",
+        "after_sha256": "b6c25a075d3cb89b185448ec4a7fe369636dd79b2772d76f451b39e9ac493abb"
+      }
+    ],
+    "raw_snapshot_unchanged": true,
+    "only_approved_two_source_ast_changes": true,
+    "regression": {
+      "python": "/root/miniconda3/bin/python",
+      "python_version": "3.12.3",
+      "torch_version": "2.8.0+cu128",
+      "device": "cpu",
+      "fixtures": "Small random Embedding and synthetic RGB tensors; no published model or dataset",
+      "command": "/root/miniconda3/bin/python /root/autodl-tmp/p1-prep/patches/question-only-v1/test_minimal_repair.py --source /root/autodl-tmp/p1-prep/source/PixDLM-question-only-f40fa58 -v",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "exit_code": 0,
+      "log": "/root/autodl-tmp/p1-prep/logs/question-only-regression-accepted-20261010.log",
+      "log_sha256": "1158f343e078295c500baffad64b7d0218ddee1c1b2aafef21b3e737fd28702b",
+      "red_logs": [
+        "/root/autodl-tmp/p1-prep/logs/question-only-source-red-20261010.log",
+        "/root/autodl-tmp/p1-prep/logs/question-only-feature-red-20261010.log",
+        "/root/autodl-tmp/p1-prep/logs/question-only-rgb-whitelist-red-20261010.log"
+      ],
+      "failed_fixture_log": "/root/autodl-tmp/p1-prep/logs/question-only-regression-20261010.log"
+    },
+    "remaining_checks": [
+      "Generation hidden_states nested-tuple versus evaluate tensor projection and SEG alignment",
+      "Independent inference dependencies, checkpoint loading keys and RGB preprocessing",
+      "Approved single-sample model run and real GT isolation; no model acceptance yet"
+    ]
   },
   "preflight_checks": {
     "tokenizer_local_load": true,
@@ -98,7 +152,7 @@
     "clip_processor_and_config_local_load": true,
     "pixdlm_config_metadata_checked": true,
     "generic_auto_config_load": "KeyError llava; custom model registration not yet performed",
-    "generation_txt_feat_propagation": "Missing at evaluate->generate and prepare_inputs_for_generation; isolated helper confirmed loss; not patched",
+    "generation_txt_feat_propagation": "Patched in independent source copy; CPU contract regressions passed; full model not run",
     "model_loaded": false,
     "training_or_evaluation_run": false,
     "gpu_visible": false,

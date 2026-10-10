@@ -1,6 +1,6 @@
 # Experiment - PixDLM validation底座核验
 
-草稿v0.4，模型协议未冻结。资产已验收、固定源码与轻量依赖已准备；精确模型命令和question-only补丁仍待核定，无模型运行记录。用户明确算力/费用不作硬边界，不再以报价或费用审批阻塞。
+草稿v0.4，模型运行协议未冻结。用户已确认最小修复方案，两处txt_feat补丁与question-only输入适配器工程检查通过；精确模型命令及完整生成/分割链路仍待核定，无模型运行记录。算力/费用不作硬边界，不再以报价或费用审批阻塞。
 
 ## 0. 身份
 - run前缀：p1_base_val；日期：2026-10-08。
@@ -8,7 +8,7 @@
 - 输入：[底座档案草稿](../../idea/base_paper_PixDLM.md)。
 - 来源版本：HF f40fa586e28f644d5db19e6d8905f626a6b7fd13；GitHub 400aaeaec7b3a2dfa91aab0c60b7534c68199061另记，禁止默认互换。
 - 数据版本：DRSeg 2b143f9a0721b7b5dbba4dd9f0bed9a22ede444d；split=validation（源码参数为custom_seg|val）；整包SHA256已核，validation样本清单尚未生成。
-- 精确运行代码版本/补丁哈希：待核，不编造。
+- 源码副本：PixDLM-question-only-f40fa58；补丁/适配器/回归脚本与修改前后SHA256见preparation_manifest.json。模型运行配置及命令仍待冻结。
 
 ## 1. 预注册
 - 唯一问题：公开PixDLM 7B能否在不读取标注回答作为模型输入、预处理与指标可追溯的条件下，产生可信validation预测？本轮不回答参照机制是否有效。
@@ -41,7 +41,8 @@
 ## 4. 固定条件
 - 输入：RGB+原问题；GT mask仅评分，answers/CoT标注禁止模型读取；仅自身生成文本可参与后续分割。
 - 官方脚本scripts/eval_drseg.sh默认custom_seg|test，禁止直接运行。精确validation入口及生成/分割token路径待核，不能只把answers置空后假定有效。
-- 最小修复方案（待确认）：独立入口只由RGB+原问题构造输入与txt_feat，GT回答/CoT不参与；补齐evaluate到generate、prepare_inputs_for_generation两处txt_feat传递；使用本地CLIP路径配置映射，原始HF快照保持不改。先用回归检查验证特征传递与GT隔离，再运行模型；补丁/配置哈希单列，不改HRD、loss、阈值、分辨率或绕过文本融合，不称未经修改的官方复现。
+- 最小修复（已确认并实现）：question_only.py只接收单样本RGB张量、几何元数据和原问题，文本特征仅由原问题经同一语言骨干构造，助手回复为空，接口拒绝answers/GT参数；pixdlm_question_only.patch补齐两处txt_feat传递。local_model_config只映射两项CLIP路径，加载前显式设置PIXDLM_ROOT，原HF快照不改。不改HRD、loss、阈值、分辨率或绕过文本融合，不称未经修改的官方复现。CPU回归不替代实际模型的GT隔离检查。
+- 仍需解决：固定Transformers的generation.hidden_states为嵌套tuple，evaluate将最后一步整体传入text_hidden_fcs；需核对最后层与生成序列/分割token对齐。本轮不把这项未获审查的改动塞进两处特征补丁，也不以回归通过宣称完整生成可运行。
 - 预处理：保留固定版本的448配置及细节路径原处理；原图/resize/pad/坐标逆变换逐项记录，不靠图示猜。
 - 权重：发布权重仅作底座诊断；正式20%训练baseline不能从全DRSeg微调权重开始。
 - 本轮训练/收敛：不适用，无训练；若资产必须训练才能使用，停报另批。
@@ -64,6 +65,8 @@
 
 ## 6. 运行记录
 模型未运行，不预建成功日志或delivery目录。2026-10-08完成只读容器预检；摘要见[preflight.md](preflight.md)。2026-10-10完成资产验收与源码/轻量依赖准备；检查及失败记录见[asset_preparation.md](asset_preparation.md)。这些不是模型smoke或研究结果。
+
+最小修复工程检查：原源码两项传递检查失败；缺少问题特征构造/完整RGB白名单时各一项检查失败；实现后容器基础Python 3.12.3、PyTorch 2.8.0+cu128仅CPU执行10项检查，零失败/零跳过。使用小型随机Embedding和合成RGB张量，不加载发布权重或数据，不构成validation结果。实际命令、原始输出位置与哈希见准备清单。
 
 ## 7. 结果
 无自己的指标、配对差、CI或推理性能。

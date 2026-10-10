@@ -1,0 +1,23 @@
+diff --git a/model/PixDLM.py b/model/PixDLM.py
+--- a/model/PixDLM.py
++++ b/model/PixDLM.py
+@@ -836,5 +836,6 @@
+                     num_beams=1,
+                     output_hidden_states=True,
+                     return_dict_in_generate=True,
+-                    clip_resize_list=clip_resize_list
++                    clip_resize_list=clip_resize_list,
++                    txt_feat=txt_feat
+                 )
+diff --git a/model/llava/language_model/llava_llama.py b/model/llava/language_model/llava_llama.py
+--- a/model/llava/language_model/llava_llama.py
++++ b/model/llava/language_model/llava_llama.py
+@@ -172,6 +172,7 @@
+                 "attention_mask": attention_mask,
+                 "images": images,
+-                "clip_resize_list": clip_resize_list
++                "clip_resize_list": clip_resize_list,
++                "txt_feat": kwargs.get("txt_feat")
+             }
+         )
+         return model_inputs

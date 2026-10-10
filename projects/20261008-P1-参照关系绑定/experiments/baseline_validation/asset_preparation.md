@@ -166,3 +166,9 @@ sha256sum /root/autodl-tmp/p1-prep/assets/pixdlm/pytorch_model.bin.partial
 - deployment目录用软链接复用已验收权重/配置/SAM2源码，检查无失效链接；需显式设置PIXDLM_ROOT及本地CLIP配置映射。原HF配置未改，数据包未解压。
 - 静态审查及隔离执行官方generation helper确认：PixDLM.evaluate的generate调用不传txt_feat，prepare_inputs_for_generation也不保留它。未写补丁；最小question-only修复设计列入experiment.md v0.4待确认，不能直接跑默认test或只改split。
 - 复检仍无GPU、0.5核/2GiB内存、磁盘约32G可用；SSH已退出。未训练、评测或读取test，推理环境尚未就绪。
+
+用户随后确认最小修复：补丁只作用于PixDLM-question-only-f40fa58副本，两处原文件先核SHA256，原HF快照保留。question_only.py构造无助手回答的提示、纯问题特征及RGB输入白名单；不读取answers/GT，不负责数据解包、RGB预处理、模型加载或评分。本地路径映射已对实际deployment配置核对，只改vision_tower/mm_vision_tower；运行前仍须设置PIXDLM_ROOT。
+
+回归先失败再实现；容器基础Python/PyTorch仅CPU运行10项工程检查全部通过（零跳过），修复前后哈希、命令和原始日志位置见准备清单。本机没有PyTorch，张量检查跳过，不能用本机输出冒充完整通过。首轮张量夹具漏掉DEFAULT_IMAGE_TOKEN导致NameError，原question-only-regression-20261010.log保留；改用固定源码完整mm_utils模块后通过。仅副本的两处源码AST有批准的传递改动，其余文件不变；脚本/补丁按LF锁定，本地与容器哈希一致。未运行发布模型或数据，SSH已退出。
+
+另核实固定Transformers生成输出的hidden_states注解为Optional[Tuple[Tuple[torch.FloatTensor]]]，官方evaluate直接将最后一步送入张量投影，仍需审查层/序列对齐；未在本补丁中擅改，推理ready继续为false。

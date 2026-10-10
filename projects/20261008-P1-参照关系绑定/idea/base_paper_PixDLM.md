@@ -8,7 +8,7 @@
 - 官方 GitHub HEAD：此前查询为400aaeaec7b3a2dfa91aab0c60b7534c68199061；未clone该版本，不与本轮HF快照默认互换。
 - 拟核公开7B版本：[HF](https://huggingface.co/WhynotHug/PixDLM/tree/f40fa586e28f644d5db19e6d8905f626a6b7fd13)，固定HF源码与权重均已下载、核对源端哈希；与 GitHub 内容一致性仍待核。路径与校验值见[准备清单](../experiments/baseline_validation/preparation_manifest.json)。
 - DRSeg revision：2b143f9a0721b7b5dbba4dd9f0bed9a22ede444d；整包已验收，路径与SHA256见准备清单，尚未解包。未读取 test 样本。
-- evaluator：公开 eval.py 静态审查见项目 EVIDENCE；干净输入版本尚未实现/验收。
+- evaluator：公开 eval.py 静态审查见项目 EVIDENCE；question-only输入适配器与两处txt_feat补丁已完成工程检查，完整模型生成/分割及真实样本GT隔离仍未验收。
 
 ## 1. 复现
 - 模型命令和日志：尚无；准备命令与检查摘要见[资产准备记录](../experiments/baseline_validation/asset_preparation.md)。确切推理命令待依赖与补丁核定，不把官方默认 test 命令当作本轮入口。
