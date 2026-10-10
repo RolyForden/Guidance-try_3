@@ -12,12 +12,20 @@ diff --git a/model/PixDLM.py b/model/PixDLM.py
 diff --git a/model/llava/language_model/llava_llama.py b/model/llava/language_model/llava_llama.py
 --- a/model/llava/language_model/llava_llama.py
 +++ b/model/llava/language_model/llava_llama.py
-@@ -172,6 +172,7 @@
+@@ -154,6 +154,7 @@
+         inputs_embeds=None,
+         images=None,
+         clip_resize_list=None,
++        txt_feat=None,
+         **kwargs
+     ):
+         if past_key_values:
+@@ -172,6 +173,7 @@
                  "attention_mask": attention_mask,
                  "images": images,
 -                "clip_resize_list": clip_resize_list
 +                "clip_resize_list": clip_resize_list,
-+                "txt_feat": kwargs.get("txt_feat")
++                "txt_feat": txt_feat
              }
          )
          return model_inputs

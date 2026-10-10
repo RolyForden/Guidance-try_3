@@ -1,6 +1,6 @@
 # Experiment - P1 20% Baseline Training
 
-待审草案v0.2（2026-10-10）：用户已同意从基础初始化重建baseline、训练缺失的对齐模块；此为路线确认，不冒充完整协议审批或工程验收。以下§0–§5由agent预填；实际命令、参数加载与保存恢复验收完成后提交最终冻结版，用户只审批、不填表。本轮未训练。
+待审草案v0.3（2026-10-10）：用户已同意从基础初始化重建baseline、训练缺失的对齐模块；此为路线确认，不冒充完整协议审批或工程验收。新增实际加载审计与多多边形GT口径提议。以下§0–§5由agent预填；实际命令、参数加载与保存恢复验收完成后提交最终冻结版，用户只审批、不填表。本轮未正式训练。
 
 ## 0. 身份
 - 类型：20%平台的同步baseline准备；无P1候选模块，不作方法有效性判决。
@@ -42,7 +42,8 @@
 - 保留官方结构/监督默认：三尺度、每尺度3个SEG token、HRD、多路径编码、LoRA r8/alpha16/dropout0.05，q_proj/v_proj；训练可用原answers/GT，所有development/val预测只用RGB+原问题。
 - 已确认的协议改动：在官方LoRA/任务头解冻之后，额外解冻model.vision_tower.align_stages与align_stages_latent的全部参数；不替换模块，不删除SAM路径，不改变损失。两类模块保留固定源码自身的初始化（包括latent投影的零初始化），由各训练seed在构造前固定随机状态；不把它们称为预训练模块。沿用相同AdamW参数组默认，不额外搜索对齐学习率。
 - 参数边界：保留官方语言LoRA、任务头、embedding/lm_head与mm_projector训练设置；CLIP/SAM骨干保持冻结，仅对齐模块解冻。先输出完整参数名/shape/requires_grad及各来源加载键清单，逐项核验，而非靠名称包含vision_tower整体解冻；任何额外新建/重置/未加载参数都须解释来源，不以strict=False吞掉缺项。
-- 初始化审计：LoRA/任务头/对齐模块以及新增token embedding可由固定seed初始化；mm_projector若因LLaVA与PixDLM形状/结构不同需重建，必须列出精确键/shape与初始化规则后纳入最终审批。当前不宣称键兼容，不提供忽略全部mismatch的加载命令。CLIP/SAM应核对对应源权重加载，不在加载后重建模块覆盖已载参数。
+- 初始化审计（实际加载通过，待最终审批）：基础语言291项逐张量复制核对；LLaVA的model.mm_projector.{0,2}.{weight,bias}明确不加载，PixDLM的model.mm_projector.weight/bias由固定源码随机初始化；原model.image_newline及391项336版CLIP参数不加载，使用固定外部CLIP/SAM2。LoRA/任务头/对齐及新增token由构造前固定seed初始化，CPU FP32构造后转bf16。加载回执含精确shape与参数名；可训练参数310806451个，其中40个对齐参数对象，CLIP/SAM骨干无可训练参数。外部骨干最终数值核验待完成，不以模型能加载代替此项。
+- GT口径提议（未批准）：同一目标全部COCO多边形按原RGB尺寸取并集，训练与独立评分一致；不擅自采用上游仅首多边形规则。604/302子集审计分别有100/56图两种口径不同，详见EVIDENCE.md。gt_mask.py默认拒绝多块，只有显式指定union或first_polygon才解码；尚未据此训练或评分模型。
 - 官方默认优化器：AdamW lr3e-4、betas(0.9,0.95)、weight_decay0；CE/Dice/BCE权重1/0.5/2，梯度裁剪1、WarmupDecayLR warmup100步、ZeRO2；不在本轮私自改成别的算法。
 - 默认batch1、accumulation1、bf16、CLIP448中心裁剪、细节图长边1024后标准化/补零；已核1张RTX4080 SUPER（驱动32760MiB）、bf16与小型CUDA运算通过。真实模型显存、前向/反向仍待验收，遇OOM不静默量化或改变batch。
 - 评分解码默认建议：seed17、greedy（do_sample=False）、num_beams=1、max_new_tokens=512，沿用固定tokenizer/EOS、缓存生成与question-only特征构造；这些是待冻结条件，不是已跑通的模型配置。无完整SEG组时保留生成文本/状态，记录结构失败率，并按空前景计入所有样本分母，不丢样本、不根据GT补SEG或挑mask；shape/NaN/加载与实现异常仍停报。需在独立评分入口用失败夹具检验此规则，不能把填充的空预测称为原模型mask。
@@ -69,6 +70,10 @@
 
 ## 6. 运行记录
 无训练记录。数据准备和CPU工程检查见现有准备清单；不当作模型结果。
+
+重建工程实现：rebuild_baseline.py严格审计基础加载与对齐解冻，test_rebuild_baseline.py在固定容器运行14项零失败/零跳过（含实际源码缩小对齐模块的梯度、更新、AdamW保存恢复重放）；gt_mask.py及其9项测试在容器零失败/零跳过。此恢复检查不涵盖完整7B或DeepSpeed。真实加载日志/回执位于logs/rebuild-load-audit-20261010-v2.*；不提交过程回执。首次真实生成被Transformers参数签名校验拒绝，已为prepare_inputs_for_generation显式声明txt_feat，固定运行时12项传递/参数校验回归通过，失败日志保留。不关闭框架校验、不改模型结构或损失。
+
+生成对齐修复：首轮真实生成被 Transformers `_validate_model_kwargs` 拒绝（`txt_feat` 未声明），已在 `prepare_inputs_for_generation` 显式声明；再跑又在 `torch.cat([step[-1] ...])` 崩溃，原因是 eval 模式下 `hidden_states` 已是逐步单张量而非逐层元组，`step[-1]` 丢掉了 batch 维。改为 `torch.cat(list(output.hidden_states), dim=1)` 后固定单样本真实生成通过（hidden 形状 `(1,327,4096)` = `sequences-1+visual`，有限，峰值 15.2GiB）；该修复同步进 `pixdlm_generation_alignment.patch`。仅为工程 smoke，不作指标。
 
 ## 7. 结果
 无训练loss、development/val指标或吞吐结果。

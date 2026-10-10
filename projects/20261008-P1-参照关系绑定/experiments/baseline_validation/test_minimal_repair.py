@@ -48,6 +48,22 @@ class SourceContractTests(unittest.TestCase):
         self.assertIs(result.get("txt_feat"), feature)
         self.assertIs(result["input_ids"], ids)
 
+    def test_generation_signature_declares_feature_for_transformers_validation(self):
+        import inspect
+        self.assertIn("txt_feat", inspect.signature(self.helper()).parameters)
+
+    @unittest.skipUnless(importlib.util.find_spec("transformers"), "Transformers required")
+    def test_real_generation_validator_accepts_feature_and_rejects_typo(self):
+        from transformers.generation.utils import GenerationMixin
+
+        dummy = type("GenerationContract", (GenerationMixin,), {
+            "prepare_inputs_for_generation": self.helper(),
+            "forward": lambda self, **kwargs: None,
+            "config": types.SimpleNamespace(is_encoder_decoder=False)})()
+        dummy._validate_model_kwargs({"txt_feat": object()})
+        with self.assertRaises(ValueError):
+            dummy._validate_model_kwargs({"txt_feet": object()})
+
     def test_generation_cached_step_preserves_text_features(self):
         feature = object()
         last_token = object()
@@ -105,6 +121,12 @@ class SourceContractTests(unittest.TestCase):
                              and k.value == "txt_feat")
                 mapping.keys.pop(index)
                 mapping.values.pop(index)
+                if "txt_feat" in [arg.arg for arg in helper.args.args]:
+                    index = next(i for i, arg in enumerate(helper.args.args)
+                                 if arg.arg == "txt_feat")
+                    first_default = len(helper.args.args) - len(helper.args.defaults)
+                    helper.args.defaults.pop(index - first_default)
+                    helper.args.args.pop(index)
             self.assertEqual(ast.dump(tree), ast.dump(ast.parse(raw)))
         changed = set()
         for path in original.rglob("*"):
