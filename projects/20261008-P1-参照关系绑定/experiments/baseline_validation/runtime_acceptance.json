@@ -1,0 +1,36 @@
+{
+  "direct_versions": {
+    "torch": "2.5.1+cu124",
+    "torchvision": "0.20.1+cu124",
+    "transformers": "4.31.0",
+    "tokenizers": "0.13.3",
+    "accelerate": "0.34.2",
+    "deepspeed": "0.15.4",
+    "peft": "0.10.0",
+    "sentencepiece": "0.1.99",
+    "protobuf": "4.25.3",
+    "huggingface-hub": "0.26.5",
+    "opencv-python": "4.10.0.84",
+    "Pillow": "10.4.0",
+    "numpy": "1.26.4",
+    "scipy": "1.13.1",
+    "einops": "0.8.0",
+    "matplotlib": "3.9.2",
+    "pycocotools": "2.0.8",
+    "tensorboard": "2.18.0",
+    "hydra-core": "1.3.2",
+    "omegaconf": "2.3.0",
+    "iopath": "0.1.10",
+    "safetensors": "0.4.5"
+  },
+  "cpu_imports_passed": true,
+  "sam2_version": "1.0",
+  "cuda_available": false,
+  "random_tiny_llama_cached_step_lengths": [
+    4,
+    1,
+    1
+  ],
+  "published_weights_or_dataset_read": false,
+  "published_model_alignment_verified": false
+}

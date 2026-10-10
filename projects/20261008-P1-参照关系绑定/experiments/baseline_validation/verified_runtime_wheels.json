@@ -1,0 +1,37 @@
+[
+  {
+    "bytes": 7285209,
+    "filename": "torchvision-0.20.1+cu124-cp310-cp310-linux_x86_64.whl",
+    "method": "hard link of completed verified wheel; no duplicate file bytes",
+    "sha256": "3a055e4e9040b129878d57c39db55f117f975899ff30dd70c8f2621d91170dbe",
+    "source": "official PyTorch cu124 index"
+  },
+  {
+    "bytes": 908270848,
+    "filename": "torch-2.5.1+cu124-cp310-cp310-linux_x86_64.whl",
+    "method": "hard link of completed verified wheel; no duplicate file bytes",
+    "sha256": "9dde30f399ca22137455cca4d47140dfb7f4176e2d16a9729fc044eebfadb13a",
+    "source": "official PyTorch cu124 index"
+  },
+  {
+    "bytes": 883737,
+    "filename": "nvidia_cuda_runtime_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl",
+    "method": "hard link of completed verified wheel; no duplicate file bytes",
+    "sha256": "64403288fa2136ee8e467cdc9c9427e0434110899d07c779f25b5c068934faa5",
+    "source": "official PyPI metadata"
+  },
+  {
+    "bytes": 13813957,
+    "filename": "nvidia_cuda_cupti_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl",
+    "method": "hard link of completed verified wheel; no duplicate file bytes",
+    "sha256": "9dec60f5ac126f7bb551c055072b69d85392b13311fcc1bcda2202d172df30fb",
+    "source": "official PyPI metadata"
+  },
+  {
+    "bytes": 24640306,
+    "filename": "nvidia_cuda_nvrtc_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl",
+    "method": "hard link of completed verified wheel; no duplicate file bytes",
+    "sha256": "a178759ebb095827bd30ef56598ec182b85547f1508941a3d560eb7ea1fbf338",
+    "source": "official PyPI metadata"
+  }
+]
