@@ -1,3 +1,4 @@
 question_only.py text eol=lf
 test_minimal_repair.py text eol=lf
 pixdlm_question_only.patch text eol=lf
+training_initialization.aria2 text eol=lf

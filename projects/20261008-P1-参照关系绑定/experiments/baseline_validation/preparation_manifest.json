@@ -146,6 +146,66 @@
       "Approved single-sample model run and real GT isolation; no model acceptance yet"
     ]
   },
+  "training_initialization": {
+    "recipe": "Fixed HF PixDLM scripts/train_drseg.sh --base-model; do not initialize 20% screening from full-DRSeg fine-tuned PixDLM",
+    "repo": "liuhaotian/llava-v1.6-vicuna-7b",
+    "revision": "deae57a8c0ccb0da4c2661cc1891cc9d06503d11",
+    "official_and_mirror_metadata_match": true,
+    "path": "/root/autodl-tmp/p1-prep/assets/llava-v1.6-vicuna-7b",
+    "small_files_verified": 10,
+    "total_weight_bytes": 14125909456,
+    "weights_complete": false,
+    "files": [
+      {
+        "path": "model-00001-of-00003.safetensors",
+        "expected_bytes": 4938993632,
+        "expected_sha256": "f61fd54d6e47f55db4452dd5a263cb5323d1b8077cad86bf536ae0e6b46b5df5"
+      },
+      {
+        "path": "model-00002-of-00003.safetensors",
+        "expected_bytes": 4947390880,
+        "expected_sha256": "a5219e366b4da0d6df6116a2b71c6bceea0b77dfcc5fdec4fa774f0f26c39ec4"
+      },
+      {
+        "path": "model-00003-of-00003.safetensors",
+        "expected_bytes": 4239524944,
+        "expected_sha256": "52a8836fee344f7582a208e4c01d218aa53fa3a3edbfab4538f50aecd57c1646"
+      }
+    ],
+    "download": {
+      "input_file": "training_initialization.aria2",
+      "input_sha256": "263c2b7f6bb574bcd26900c00aa34143a6b6d162c89f1243ecdc25abe82f1017",
+      "timeout_pid": 60996,
+      "aria2_pid": 60997,
+      "confirmed_live": true,
+      "log": "/root/autodl-tmp/p1-prep/logs/llava-training-init-20261010.log",
+      "connections_per_file": 8,
+      "concurrent_files": 1,
+      "max_tries": 12,
+      "engineering_timeout_seconds": 43200,
+      "automatic_restart_authorized": false,
+      "depends_on_local_proxy": false
+    },
+    "checkpoint_loading_verified": false
+  },
+  "dataset_preparation": {
+    "path": "/root/autodl-tmp/p1-prep/datasets/DRSeg",
+    "extracted_files": 5001,
+    "expanded_bytes": 1387090468,
+    "split_policy": "Only train/val images and labels extracted; original split preserved, no screening subset selected yet",
+    "train_rows": 2999,
+    "val_rows": 2000,
+    "train_labels_sha256": "00d23b81779287c28895c0f658b285a33735d892a56de63efbea849a324b07e3",
+    "val_labels_sha256": "08756234cd6e36265621770b7864aa1c5d94640ec7c8c9a2e3e87f6e8b4e7a33",
+    "image_paths_all_present": true,
+    "ids_unique_within_splits": true,
+    "train_val_id_overlap": 0,
+    "questions_per_row": 1,
+    "question_answer_length_mismatches": 0,
+    "image_byte_duplicates_or_scene_groups_checked": false,
+    "test_extracted": false,
+    "test_sample_content_read": false
+  },
   "preflight_checks": {
     "tokenizer_local_load": true,
     "tokenizer_size": 32015,
@@ -265,9 +325,10 @@
     }
   ],
   "not_downloaded": [
+    "Training initialization weight shards not yet complete",
     "Remaining model runtime dependencies, including PyTorch/torchvision"
   ],
-  "background_download_running": false,
+  "background_download_running": true,
   "background_job": {
     "pid": 34100,
     "aria2_pid": 34101,

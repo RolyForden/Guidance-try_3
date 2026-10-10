@@ -172,3 +172,7 @@ sha256sum /root/autodl-tmp/p1-prep/assets/pixdlm/pytorch_model.bin.partial
 回归先失败再实现；容器基础Python/PyTorch仅CPU运行10项工程检查全部通过（零跳过），修复前后哈希、命令和原始日志位置见准备清单。本机没有PyTorch，张量检查跳过，不能用本机输出冒充完整通过。首轮张量夹具漏掉DEFAULT_IMAGE_TOKEN导致NameError，原question-only-regression-20261010.log保留；改用固定源码完整mm_utils模块后通过。仅副本的两处源码AST有批准的传递改动，其余文件不变；脚本/补丁按LF锁定，本地与容器哈希一致。未运行发布模型或数据，SSH已退出。
 
 另核实固定Transformers生成输出的hidden_states注解为Optional[Tuple[Tuple[torch.FloatTensor]]]，官方evaluate直接将最后一步送入张量投影，仍需审查层/序列对齐；未在本补丁中擅改，推理ready继续为false。
+
+训练前准备继续：官方scripts/train_drseg.sh的初始化是LLaVA-v1.6-vicuna-7b，而非发布PixDLM微调权重。固定初始化revision、三片大小与SHA256已交叉核对官方HF和镜像API，合计14125909456字节；10项小文件核对上游blob/LFS通过。数据盘复检约32G可用后，以单文件8连接启动独立可恢复下载（最多12次网络尝试、12小时防失联时限，不作为算力/费用门槛）；timeout/aria2 PID60996/60997已确认运行，timeout的PPID为1。最新日志首片178MiB、瞬时328KiB/s，不承诺完成时间，不能将稀疏文件长度作为进度。
+
+仅按白名单解包DRtrain、DRval图像及两个对应JSON，映射到源码要求的CODrone/DRtrain、CODrone/DRval和labels目录；拒绝覆盖现有目标、检查路径和容量，共5001文件/1387090468字节，zip CRC读取无异常。结构检查2999/2000记录各有1题、问答长度匹配、ID唯一、图像路径全部存在，两split的ID交集为0；尚未核查图像字节重复或场景簇，不能据此宣称无数据泄漏。只读取归档目录元数据及train/val，未解包或读取test样本。原始标签哈希、路径与下载句柄见准备清单；未训练或评测，SSH已退出。
