@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-09",
+  "date": "2026-10-10",
   "scope": "Preparation only; no model loading, training or evaluation",
   "root": "/root/autodl-tmp/p1-prep",
   "environment": {
@@ -101,13 +101,14 @@
       "repo": "WhynotHug/PixDLM",
       "revision": "f40fa586e28f644d5db19e6d8905f626a6b7fd13",
       "path": "/root/autodl-tmp/p1-prep/assets/pixdlm/pytorch_model.bin.partial",
-      "actual_bytes": 173391299,
+      "actual_bytes": 13611289441,
       "expected_complete_bytes": 13611289441,
       "expected_complete_sha256": "fc3f8ec17e57c17068be371c33bbe06b156be779f0087a5bb63d9f658729b220",
-      "complete": false,
-      "complete_hash_verified": false,
-      "status_at_last_check": "Downloading; latest progress is reported by heartbeat, not apparent file length",
-      "actual_bytes_snapshot": "Before aria2 restart; not current completed-byte count"
+      "complete": true,
+      "complete_hash_verified": true,
+      "actual_sha256": "fc3f8ec17e57c17068be371c33bbe06b156be779f0087a5bb63d9f658729b220",
+      "download_completed_at": "2026-10-10T00:19:36+08:00",
+      "status_at_last_check": "Complete size and SHA256 match; independently checked during 2026-10-10 heartbeat"
     },
     {
       "repo": "WhynotHug/DRSeg",
@@ -128,7 +129,7 @@
   "not_downloaded": [
     "Complete baseline source code"
   ],
-  "background_download_running": true,
+  "background_download_running": false,
   "background_job": {
     "pid": 34100,
     "aria2_pid": 34101,
@@ -149,8 +150,10 @@
     "max_tries": 12,
     "auto_save_interval_seconds": 30,
     "log": "/root/autodl-tmp/p1-prep/logs/aria2-resume-20261009.log",
-    "completion_and_hash_verification_pending": true,
+    "completion_and_hash_verification_pending": false,
+    "status": "Completed and independently verified; recorded PIDs no longer running",
     "depends_on_local_computer": false
   },
-  "local_proxy_tunnel_open": false
+  "local_proxy_tunnel_open": false,
+  "download_monitoring": "Stopped after all requested assets passed verification"
 }

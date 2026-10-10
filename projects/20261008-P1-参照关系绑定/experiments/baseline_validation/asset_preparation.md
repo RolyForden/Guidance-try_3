@@ -143,3 +143,16 @@ nohup timeout --signal=INT --kill-after=60s 30600 env -u http_proxy -u https_pro
 ```
 
 启动日志显示CN:8、原25%断点续传、瞬时834KiB/s；断开SSH后重新连接，PID34100的PPID为1，aria2仍运行，进度增至3.3GiB（26%），最新两行均约1.4MiB/s，断点记录继续更新。磁盘约41G可用。仍未完成或核验PixDLM，不运行模型、训练或评测。巡检读取同一路径日志，但PID以准备清单的新任务为准。
+
+## 2026-10-10 PixDLM验收与巡检结束
+
+11:28（北京时间）触发的巡检发现PID34100/34101均已退出。日志记录2026-10-10 00:19:36 PixDLM校验成功及下载完成；该文件.aria2断点记录已不存在，不能将最后一条99%校验进度误报为仍在运行。独立执行以下只读命令：
+
+```bash
+stat -c '%s %n' /root/autodl-tmp/p1-prep/assets/pixdlm/pytorch_model.bin.partial
+sha256sum /root/autodl-tmp/p1-prep/assets/pixdlm/pytorch_model.bin.partial
+```
+
+结果为13611289441字节、fc3f8ec17e57c17068be371c33bbe06b156be779f0087a5bb63d9f658729b220，与固定版本官方期望值一致。SAM、DRSeg、CLIP此前已独立验收，未重复下载。数据盘约32G可用，保留.partial文件名、前缀备份与原日志。当前无下载进程，实时下载速度不适用；不由日志猜测timeout整体退出码。
+
+四项大资产全部验收，停止本聊天的下载巡检；本轮未解包DRSeg、读取test、追加安装或运行模型。完整源码和推理依赖仍待准备，不能把下载完成称为复现成功。
