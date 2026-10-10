@@ -14,7 +14,7 @@
 - 支持：训练/保存/恢复/无GT输入的评分链路验收通过，两seed达到下述基本收敛判据；独立重算指标一致。
 - 否定：输入污染、错配、无解释加载键、丢失样本或保存恢复不一致时，仅否定本次工程链路。分数低或不收敛不等于否定P1方向，不隐藏负结果。
 - Prediction/Confidence：训练可运行与P1收益均未证实，不给未经测量的概率或性能目标。
-- 主指标：问题-only目标前景gIoU，原图逐mask均值、空union设1；次指标cIoU及spatial/attribute/scene分组。logit>0，cIoU epsilon建议1e-10；独立evaluator实现及合成边界测试仍待验收，不能直接用官方回答条件validation数字。
+- 主指标：问题-only目标前景gIoU，原图逐mask均值，非空union用intersection/(union+1e-5)、空union设1；次指标cIoU=累计intersection/(累计union+1e-10)及三题型分组。logit>0、ignore255；独立mask_metrics.py的13项合成边界测试及100例官方前景计数/公式对照通过。真实预测/GT解码、坐标及CI入口仍待验收，不能直接用官方回答条件validation数字。
 - baseline达标线：工程正确与基本收敛，不预设追平论文13B或发布7B数值。候选涨点/全量门槛不在本协议内。
 - 停止：test路径、输入污染、NaN/Inf、坏资产、未解释加载异常、OOM、存储不足或保存恢复失败；记录原失败，不静默换精度、batch、划分或初始化。
 

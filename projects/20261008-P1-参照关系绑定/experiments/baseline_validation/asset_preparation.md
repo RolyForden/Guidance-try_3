@@ -186,3 +186,5 @@ sha256sum /root/autodl-tmp/p1-prep/assets/pixdlm/pytorch_model.bin.partial
 补做train/val全部4999图的文件字节SHA256审计：各split内和跨split均无完全重复文件；不是像素近重复或独立场景证明。train的sequence_id缺1215/2999行，val缺846/2000行，两split共享576种采集元数据组合，不能因ID不重合宣称无泄漏。机器可读摘要、哈希见准备清单；未读test。
 
 只从原train生成待审整采集元数据代理组清单：seed20261008，按(time_of_day,location,altitude,camera_angle,sequence_id)成组、固定SHA256定序；训练604图/139组、内部development302图/61组，两集合ID及代理组无交集，三题型均有覆盖。清单回读核对计数、唯一性和整组归属通过；原训练/官方val文件未改写，无训练数据目录切换。代理组并非已核实scene，协议明确披露相关性边界，默认建议见training_experiment.md，审批前不运行。源码另显示last/best均保存完整DeepSpeed状态，当前盘容量是否够用须在真实参数/保存恢复验收中核定，不以skip_save绕过。
+
+核查train/val的ann_list数量均为每图1个目标标注。新增纯离线mask_metrics.py，接收已生成原图logits与配对GT数组，不读文件、不调用模型、不按GT匹配挑预测；完整manifest覆盖才汇总。13项边界测试在本地及独立Python3.10/NumPy环境通过；另用固定官方intersectionAndUnionGPU函数AST隔离在CPU浮点张量上核对100例合成交并/gIoU公式，全部一致。原始命令/日志哈希见准备清单；真实GT多边形解码、坐标、生成失败记录与CI仍未接入，不把这些检查当模型评测或真实数据指标。

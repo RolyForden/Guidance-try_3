@@ -7,3 +7,5 @@ test_generation_alignment.py text eol=lf
 pixdlm_generation_alignment.patch text eol=lf
 train-val-data-audit-20261010.json text eol=lf
 p1_screen20_manifest.json text eol=lf
+mask_metrics.py text eol=lf
+test_mask_metrics.py text eol=lf
